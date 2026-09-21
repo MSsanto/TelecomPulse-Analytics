@@ -13,3 +13,5 @@ web/dist/
 data/processed/
 
 data/presentation/
+
+web/public/data/

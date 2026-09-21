@@ -1,10 +1,13 @@
 {
   "name": "telecompulse-web",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
+    "prepare:data": "cd .. && python -m telecom_pulse.presentation_cli --output-dir web/public/data",
+    "predev": "npm run prepare:data",
     "dev": "vite",
+    "prebuild": "npm run prepare:data",
     "build": "tsc -b && vite build"
   },
   "dependencies": {

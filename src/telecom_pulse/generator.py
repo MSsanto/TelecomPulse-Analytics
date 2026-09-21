@@ -1,6 +1,5 @@
+import csv
 from pathlib import Path
-
-import pandas as pd
 
 
 REFERENCE_ROWS = [
@@ -58,4 +57,7 @@ REFERENCE_ROWS = [
 def generate_reference_dataset(path: Path) -> None:
     """Write the public synthetic reference dataset used by tests and demos."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    pd.DataFrame(REFERENCE_ROWS).to_csv(path, index=False)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=REFERENCE_ROWS[0].keys())
+        writer.writeheader()
+        writer.writerows(REFERENCE_ROWS)

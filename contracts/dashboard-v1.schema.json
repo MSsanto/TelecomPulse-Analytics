@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://telecompulse.local/contracts/dashboard-v1.schema.json",
+  "title": "TelecomPulse Dashboard Contract v1",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "generated_from",
+    "window",
+    "summary",
+    "by_carrier",
+    "by_site",
+    "by_cause",
+    "timeline",
+    "incidents"
+  ],
+  "properties": {
+    "contract_version": {"const": "1.0"},
+    "generated_from": {"type": "string"},
+    "window": {
+      "type": "object",
+      "required": ["start", "end"],
+      "properties": {
+        "start": {"type": "string", "format": "date-time"},
+        "end": {"type": "string", "format": "date-time"}
+      }
+    },
+    "summary": {"type": "object"},
+    "by_carrier": {"type": "array", "items": {"type": "object"}},
+    "by_site": {"type": "array", "items": {"type": "object"}},
+    "by_cause": {"type": "array", "items": {"type": "object"}},
+    "timeline": {"type": "array", "items": {"type": "object"}},
+    "incidents": {"type": "array", "items": {"type": "object"}}
+  },
+  "additionalProperties": false
+}

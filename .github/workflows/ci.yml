@@ -36,8 +36,13 @@ jobs:
         working-directory: web
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install -e ..
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm install
       - run: npm run build
+      - run: test -f dist/data/dashboard-v1.json

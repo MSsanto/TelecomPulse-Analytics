@@ -2,7 +2,7 @@
 
 ## Status
 
-**Proposta de arquitetura para validação na Sprint 0.** Não representa implementação já existente.
+**Arquitetura implementada até a Sprint 4.** O frontend estático e a camada analítica estão funcionais e validados por CI. Publicação Cloudflare permanece para a Sprint 5.
 
 ## Princípios
 
@@ -197,3 +197,28 @@ Backend em runtime poderá ser avaliado quando houver:
 - persistência multiusuário.
 
 Até lá, adicionar D1, Workers ou API seria complexidade sem requisito.
+
+
+## Estado implementado até Sprint 4
+
+- ingestão CSV sintético;
+- normalização e validação em Python/Pandas;
+- métricas analíticas testadas;
+- contrato dashboard v1;
+- artefatos JSON/CSV de apresentação;
+- React/TypeScript/Vite;
+- testes de componente com Vitest/Testing Library;
+- CI com Ruff, pytest, frontend tests, npm audit e budget de bundle;
+- build estático contendo o contrato em `dist/data/dashboard-v1.json`.
+
+## Decisão de runtime
+
+O MVP continua sem API, Worker ou D1. O dashboard é compilado como site estático e consome um contrato JSON gerado antes do build.
+
+Essa decisão reduz:
+- superfície de ataque;
+- custo operacional;
+- dependências de runtime;
+- complexidade de deploy.
+
+Uma camada de backend só deverá ser introduzida quando atualização frequente, autenticação, volume ou consultas server-side justificarem a mudança.

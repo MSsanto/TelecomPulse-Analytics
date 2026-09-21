@@ -11,3 +11,5 @@ web/dist/
 .DS_Store
 
 data/processed/
+
+data/presentation/

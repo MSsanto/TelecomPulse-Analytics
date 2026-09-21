@@ -21,6 +21,13 @@ jobs:
       - run: ruff check src tests
       - run: pytest -q
       - run: python -m telecom_pulse.cli
+      - run: python -m telecom_pulse.presentation_cli
+      - run: test -f data/presentation/dashboard-v1.json
+      - run: test -f data/presentation/by_carrier.csv
+      - run: test -f data/presentation/by_site.csv
+      - run: test -f data/presentation/by_cause.csv
+      - run: test -f data/presentation/timeline.csv
+      - run: test -f data/presentation/incidents.csv
 
   web:
     runs-on: ubuntu-latest

@@ -94,6 +94,7 @@ def test_overlap_is_not_double_counted() -> None:
 def test_availability_clips_intervals_to_window() -> None:
     frame = pd.DataFrame(
         {
+            "site_id": ["SITE-TEST"],
             "status": ["resolved"],
             "opened_at": pd.to_datetime(["2026-09-01T09:30:00Z"], utc=True),
             "restored_at": pd.to_datetime(["2026-09-01T10:30:00Z"], utc=True),

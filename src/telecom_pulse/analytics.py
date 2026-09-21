@@ -23,6 +23,25 @@ def merge_intervals(
     return merged
 
 
+def _clipped_intervals(
+    frame: pd.DataFrame,
+    window_start: pd.Timestamp,
+    window_end: pd.Timestamp,
+) -> list[tuple[pd.Timestamp, pd.Timestamp]]:
+    resolved = frame[
+        frame["status"].eq("resolved")
+        & frame["opened_at"].notna()
+        & frame["restored_at"].notna()
+    ]
+    intervals: list[tuple[pd.Timestamp, pd.Timestamp]] = []
+    for row in resolved.itertuples():
+        start = max(row.opened_at, window_start)
+        end = min(row.restored_at, window_end)
+        if start < end:
+            intervals.append((start, end))
+    return intervals
+
+
 def downtime_minutes_without_overlap(frame: pd.DataFrame) -> float:
     """Calculate resolved downtime without double-counting overlapping incidents."""
     resolved = frame[
@@ -30,14 +49,27 @@ def downtime_minutes_without_overlap(frame: pd.DataFrame) -> float:
         & frame["opened_at"].notna()
         & frame["restored_at"].notna()
     ]
-    intervals = [
-        (row.opened_at, row.restored_at)
-        for row in resolved.itertuples()
-    ]
+    intervals = [(row.opened_at, row.restored_at) for row in resolved.itertuples()]
     return round(
         sum((end - start).total_seconds() / 60 for start, end in merge_intervals(intervals)),
         2,
     )
+
+
+def effective_downtime_minutes(
+    frame: pd.DataFrame,
+    window_start: pd.Timestamp,
+    window_end: pd.Timestamp,
+) -> float:
+    """Calculate overlap-safe downtime across sites inside a fixed window."""
+    total = 0.0
+    for _, site_frame in frame.groupby("site_id", dropna=False):
+        intervals = _clipped_intervals(site_frame, window_start, window_end)
+        total += sum(
+            (end - start).total_seconds() / 60
+            for start, end in merge_intervals(intervals)
+        )
+    return round(total, 2)
 
 
 def availability_pct(
@@ -45,28 +77,18 @@ def availability_pct(
     window_start: pd.Timestamp,
     window_end: pd.Timestamp,
 ) -> float:
-    """Return availability percentage for a fixed analysis window."""
+    """Return site-time availability percentage for a fixed analysis window."""
     total_minutes = (window_end - window_start).total_seconds() / 60
     if total_minutes <= 0:
         raise ValueError("Analysis window must be positive")
 
-    resolved = frame[
-        frame["status"].eq("resolved")
-        & frame["opened_at"].notna()
-        & frame["restored_at"].notna()
-    ].copy()
+    site_count = int(frame["site_id"].nunique())
+    if site_count == 0:
+        return 100.0
 
-    intervals: list[tuple[pd.Timestamp, pd.Timestamp]] = []
-    for row in resolved.itertuples():
-        start = max(row.opened_at, window_start)
-        end = min(row.restored_at, window_end)
-        if start < end:
-            intervals.append((start, end))
-
-    downtime = sum(
-        (end - start).total_seconds() / 60 for start, end in merge_intervals(intervals)
-    )
-    value = max(0.0, 1 - downtime / total_minutes) * 100
+    denominator = site_count * total_minutes
+    downtime = effective_downtime_minutes(frame, window_start, window_end)
+    value = max(0.0, 1 - downtime / denominator) * 100
     return round(value, 4)
 
 

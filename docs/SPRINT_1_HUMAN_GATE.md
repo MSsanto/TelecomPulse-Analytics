@@ -4,17 +4,18 @@
 
 Esta sprint entrega o núcleo confiável de dados. Não entrega dashboard funcional nem deploy.
 
-## Evidências técnicas necessárias
+## Evidências técnicas concluídas
 
-- [ ] Ruff verde.
-- [ ] pytest verde.
-- [ ] pipeline executa.
-- [ ] quality report é gerado.
-- [ ] build frontend regressivo verde.
-- [ ] contrato de incidente versionado.
-- [ ] sobreposição temporal coberta por teste.
-- [ ] disponibilidade coberta por teste.
-- [ ] nenhum dado real/confidencial foi adicionado.
+- [x] Ruff verde.
+- [x] pytest verde — 9 testes.
+- [x] pipeline executa.
+- [x] quality report é gerado.
+- [x] build frontend regressivo verde.
+- [x] contrato de incidente versionado.
+- [x] sobreposição temporal coberta por teste.
+- [x] disponibilidade coberta por teste.
+- [x] nenhum dado real/confidencial foi adicionado.
+- [x] CI agora valida qualquer branch e pull request.
 
 ## Itens para decisão humana
 
@@ -22,7 +23,16 @@ Esta sprint entrega o núcleo confiável de dados. Não entrega dashboard funcio
 - [ ] Aprovar a estratégia de normalização.
 - [ ] Aprovar rejeição de erros críticos em vez de correção silenciosa.
 - [ ] Aprovar disponibilidade calculada sem dupla contagem de intervalos sobrepostos.
-- [ ] Aprovar avanço para Sprint 2 após merge.
+- [ ] Aprovar merge da Sprint 1 e avanço para Sprint 2.
+
+## O que está sendo homologado
+
+1. Dados inválidos críticos não são corrigidos silenciosamente.
+2. Carrier/status/cause/link_type recebem normalização previsível.
+3. Duplicidades por `incident_id` são bloqueadas.
+4. Incidente resolvido sem data de restauração é inválido.
+5. Intervalos sobrepostos não somam downtime duas vezes.
+6. Dataset público continua sintético.
 
 ## Fora do escopo
 
@@ -35,4 +45,4 @@ Esta sprint entrega o núcleo confiável de dados. Não entrega dashboard funcio
 
 ## Estado
 
-**AGUARDANDO VALIDAÇÃO TÉCNICA.**
+**AGUARDANDO HOMOLOGAÇÃO HUMANA.**

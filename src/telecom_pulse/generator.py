@@ -1,7 +1,3 @@
-import csv
-import pathlib
-
-
 REFERENCE_ROWS = [
     {
         "incident_id": "INC-0001",
@@ -53,11 +49,12 @@ REFERENCE_ROWS = [
     },
 ]
 
+FIELDS = tuple(REFERENCE_ROWS[0])
 
-def generate_reference_dataset(path: pathlib.Path) -> None:
+
+def generate_reference_dataset(path) -> None:
     """Write the public synthetic reference dataset used by tests and demos."""
     path.parent.mkdir(parents=True, exist_ok=True)
-    with path.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=REFERENCE_ROWS[0].keys())
-        writer.writeheader()
-        writer.writerows(REFERENCE_ROWS)
+    rows = [",".join(FIELDS)]
+    rows.extend(",".join(str(row[field]) for field in FIELDS) for row in REFERENCE_ROWS)
+    path.write_text("\n".join(rows) + "\n", encoding="utf-8")

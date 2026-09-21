@@ -1,7 +1,8 @@
 # Sprint 0 — Evidências técnicas
 
 Data: 2026-09-21  
-Branch: `sprint-0-foundation`
+Branch: `sprint-0-foundation`  
+PR: #1
 
 ## Governança prévia
 
@@ -22,24 +23,58 @@ Resultados observados no ambiente de implementação:
 
 ## Limitação observada
 
-A instalação local de dependências não pôde ser concluída porque o ambiente de execução não conseguiu resolver o host do índice de pacotes. O erro ocorreu antes dos testes dependentes de Pandas/pytest e não foi convertido artificialmente em sucesso.
+A instalação local de dependências não pôde ser concluída porque o ambiente executor não resolveu o host do índice de pacotes. O erro ocorreu antes dos testes dependentes de Pandas/pytest e não foi convertido artificialmente em sucesso.
 
-Por isso, a evidência autoritativa de:
-- `ruff check src tests`;
-- `pytest -q`;
-- execução do pipeline;
-- instalação do frontend;
-- `npm run build`;
+## GitHub Actions — evidência autoritativa
 
-é o workflow `.github/workflows/ci.yml` executado pelo GitHub Actions na branch/PR.
+Run validado: `35653626384`  
+Commit validado: `91a40edeef793ee7baaeacbc39b1a1fbb801aaed`
 
-## Resultado esperado do dataset de referência
+### Job Python — PASS
+
+- checkout: PASS;
+- Python 3.13: PASS;
+- instalação do pacote e dependências: PASS;
+- `ruff check src tests`: PASS;
+- `pytest -q`: PASS;
+- `python -m telecom_pulse.cli`: PASS.
+
+### Job Web — PASS
+
+- checkout: PASS;
+- Node 22: PASS;
+- `npm install`: PASS;
+- `npm run build`: PASS.
+
+## Incidente encontrado e corrigido
+
+O primeiro build web falhou com TypeScript TS5096 porque `allowImportingTsExtensions` estava habilitado em `tsconfig.node.json` sem `noEmit` ou `emitDeclarationOnly`.
+
+Correção aplicada:
+- remoção da opção incompatível;
+- novo CI executado;
+- build web passou.
+
+Isso confirma que a correção foi orientada por causa raiz observada no log, não por tentativa aleatória.
+
+## Resultado do dataset de referência
 
 - incidentes: 4;
 - resolvidos: 3;
 - downtime resolvido: 180 minutos;
 - MTTR de referência: 60 minutos.
 
-## Regra de gate
+## Revisão de escopo
 
-A Sprint 0 **não pode ser homologada** se o CI do PR não estiver verde. Merge e deploy não fazem parte da execução automática desta rodada.
+- nenhuma feature de dashboard foi antecipada;
+- nenhum dado corporativo real foi usado;
+- nenhum segredo foi adicionado;
+- nenhum deploy Cloudflare foi executado;
+- Worker/D1 continuam fora da Sprint 0;
+- código, testes, CI, README e evidências estão na mesma branch governada.
+
+## Resultado técnico
+
+**SPRINT 0: TECHNICALLY READY FOR HUMAN HOMOLOGATION**
+
+Merge e deploy permanecem bloqueados até decisão humana.

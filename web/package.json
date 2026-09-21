@@ -1,14 +1,17 @@
 {
   "name": "telecompulse-web",
   "private": true,
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "scripts": {
     "prepare:data": "cd .. && python -m telecom_pulse.presentation_cli --output-dir web/public/data",
     "predev": "npm run prepare:data",
     "dev": "vite",
     "prebuild": "npm run prepare:data",
-    "build": "tsc -b && vite build"
+    "build": "tsc -b && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "audit:high": "npm audit --audit-level=high"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",
@@ -18,7 +21,12 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.0",
     "@types/react": "^19.1.0",
-    "@types/react-dom": "^19.1.0"
+    "@types/react-dom": "^19.1.0",
+    "jsdom": "^27.0.0",
+    "vitest": "^3.2.0"
   }
 }

@@ -1,12 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import type {
-  CarrierMetric,
-  CauseMetric,
-  DashboardContract,
-  Incident,
-  SiteMetric,
-  TimelineRow,
-} from './types'
+import type { DashboardContract, Incident, MetricRow, TimelineRow } from './types'
 
 type Filters = {
   carrier: string
@@ -69,36 +62,34 @@ function KpiCard({
 }
 
 function Ranking({
+  id,
   title,
   subtitle,
   rows,
-  labelKey,
 }: {
+  id: string
   title: string
   subtitle: string
-  rows: Array<CarrierMetric | SiteMetric | CauseMetric>
-  labelKey: 'carrier' | 'site_id' | 'cause_category'
+  rows: Array<MetricRow & { label: string }>
 }) {
   const sorted = [...rows].sort((a, b) => b.downtime_minutes - a.downtime_minutes)
   const max = Math.max(...sorted.map((row) => row.downtime_minutes), 1)
 
   return (
-    <section className="panel" aria-labelledby={`ranking-${labelKey}`}>
+    <section className="panel" aria-labelledby={`ranking-${id}`}>
       <div className="section-heading">
         <div>
           <p className="section-kicker">Concentração operacional</p>
-          <h2 id={`ranking-${labelKey}`}>{title}</h2>
+          <h2 id={`ranking-${id}`}>{title}</h2>
         </div>
         <p>{subtitle}</p>
       </div>
       <div className="ranking-list">
         {sorted.map((row) => {
-          const rawLabel = String(row[labelKey])
-          const label = labelKey === 'cause_category' ? humanize(rawLabel) : rawLabel
           return (
-            <article className="ranking-row" key={rawLabel}>
+            <article className="ranking-row" key={row.label}>
               <div className="ranking-copy">
-                <strong>{label}</strong>
+                <strong>{row.label}</strong>
                 <span>
                   {formatNumber(row.incident_count)} incidentes · {formatNumber(row.downtime_minutes)} min
                 </span>
@@ -315,22 +306,22 @@ function Dashboard({ data }: { data: DashboardContract }) {
 
       <div className="ranking-grid">
         <Ranking
+          id="carrier"
           title="Operadoras"
           subtitle="Ordenadas por downtime bruto."
-          rows={data.by_carrier}
-          labelKey="carrier"
+          rows={data.by_carrier.map((row) => ({ ...row, label: row.carrier }))}
         />
         <Ranking
+          id="site"
           title="Unidades"
           subtitle="Onde a indisponibilidade se concentrou."
-          rows={data.by_site}
-          labelKey="site_id"
+          rows={data.by_site.map((row) => ({ ...row, label: row.site_id }))}
         />
         <Ranking
+          id="cause"
           title="Causas"
           subtitle="Categorias de maior impacto."
-          rows={data.by_cause}
-          labelKey="cause_category"
+          rows={data.by_cause.map((row) => ({ ...row, label: humanize(row.cause_category) }))}
         />
       </div>
 

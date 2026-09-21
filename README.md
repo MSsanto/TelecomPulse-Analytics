@@ -1,42 +1,48 @@
 # TelecomPulse Analytics
 
-Plataforma de analytics para operações de telecom e NOC, focada em transformar eventos operacionais de conectividade em indicadores de disponibilidade, SLA, incidentes, reincidência e desempenho por operadora/unidade.
+TelecomPulse Analytics é um case de engenharia de dados + analytics + frontend para operações de telecom/NOC. O projeto transforma eventos sintéticos de indisponibilidade em métricas operacionais rastreáveis e em um dashboard web estático.
 
-> Status: **Sprint 0 implementada em branch e aguardando homologação humana.** Nenhum deploy foi executado.
+> Status: **Sprint 4 em validação técnica.** Nenhum deploy Cloudflare foi executado.
 
-## Objetivo
+## O que o MVP responde
 
-Criar um case de engenharia de dados + analytics + produto web que demonstre, de ponta a ponta:
+- disponibilidade por janela;
+- downtime bruto;
+- MTTR;
+- quantidade de incidentes;
+- recorrência;
+- concentração por operadora;
+- concentração por unidade/site;
+- causas de indisponibilidade;
+- evolução temporal;
+- detalhe operacional filtrável;
+- qualidade dos dados.
 
-- ingestão e tratamento de dados operacionais;
-- qualidade e rastreabilidade dos dados;
-- modelagem de métricas de NOC/telecom;
-- geração de indicadores acionáveis;
-- visualização em dashboard web;
-- publicação controlada no Cloudflare;
-- validação técnica e evidências de cada entrega.
+## Arquitetura
 
-## MVP
+`CSV sintético → Python/Pandas → validação/normalização → analytics → dashboard-v1.json/CSVs → React/TypeScript/Vite → build estático → Cloudflare (Sprint 5)`
 
-O MVP deve responder, no mínimo:
+O frontend não recalcula KPIs críticos. Cards, rankings e timeline consomem os agregados homologados produzidos pelo pipeline.
 
-1. Qual a disponibilidade por período, unidade e operadora?
-2. Quantos incidentes ocorreram e quanto tempo duraram?
-3. Qual o MTTR?
-4. Quais unidades, links e operadoras mais reincidem?
-5. Quais causas concentram maior indisponibilidade?
-6. Qual a evolução temporal dos principais indicadores?
-7. Quais registros apresentam problema de qualidade de dados?
+## Stack
 
-## Arquitetura-alvo inicial
+### Dados
+- Python 3.13
+- Pandas
+- pytest
+- Ruff
 
-`Dados brutos → Python/Pandas → validação/normalização → camada analítica → JSON/CSV processado → React/Vite → Cloudflare`
-
-Banco/API não fazem parte do MVP inicial sem necessidade comprovada.
+### Frontend
+- React 19
+- TypeScript
+- Vite
+- Vitest
+- Testing Library
+- jsdom
 
 ## Desenvolvimento local
 
-### Pipeline Python
+### 1. Preparar Python
 
 ```bash
 python -m venv .venv
@@ -49,51 +55,71 @@ python -m pip install --upgrade pip
 pip install -e ".[dev]"
 ruff check src tests
 pytest -q
-python -m telecom_pulse.cli
 ```
 
-O pipeline usa por padrão `data/raw/incidents_synthetic.csv` e gera `data/processed/incidents.csv`.
+### 2. Executar pipeline
 
-### Frontend
+```bash
+python -m telecom_pulse.cli
+python -m telecom_pulse.presentation_cli
+```
+
+### 3. Dashboard
 
 ```bash
 cd web
 npm install
+npm test
+npm run audit:high
 npm run build
 npm run dev
 ```
 
-O frontend da Sprint 0 é apenas uma tela de fundação. O dashboard funcional começa depois da homologação desta sprint.
+`npm run dev` e `npm run build` geram automaticamente `web/public/data/dashboard-v1.json` antes de iniciar/buildar.
 
-## CI
+## Contratos
 
-O workflow `.github/workflows/ci.yml` executa:
+- `contracts/incident.schema.json`
+- `contracts/dashboard-v1.schema.json`
 
-- Ruff;
-- pytest;
-- pipeline de referência;
-- instalação do frontend;
-- build React/TypeScript/Vite.
+Documentação:
+- `docs/METRICS.md`
+- `docs/FRONTEND_DATA_CONTRACT.md`
+- `docs/ARCHITECTURE.md`
 
 ## Governança
 
-Antes de qualquer implementação funcional, ler:
+A ordem obrigatória de mudança é:
 
-- [Governança](docs/GOVERNANCE.md)
-- [Pré-projeto](docs/PROJECT_CHARTER.md)
-- [Arquitetura](docs/ARCHITECTURE.md)
-- [Plano de Sprints](docs/SPRINT_PLAN.md)
-- [Baseline de validação](docs/VALIDATION_BASELINE.md)
-- [Evidências Sprint 0](docs/SPRINT_0_EVIDENCE.md)
-- [Gate humano Sprint 0](docs/SPRINT_0_HUMAN_GATE.md)
-- [Template de mudança](docs/CHANGE_TEMPLATE.md)
+`Normas → Baseline → Validação → Evidências → Documentação → Implementação → Revalidação → Review`
 
-## Estado do projeto
+Leia:
+- `docs/GOVERNANCE.md`
+- `docs/SPRINT_PLAN.md`
+- `docs/RISK_REGISTER.md`
+- evidências/gates de cada sprint.
 
-- Repositório: criado.
-- Cloudflare: ambiente criado pelo proprietário do projeto.
-- Integração/deploy Cloudflare: ainda não homologado.
-- Sprint 0: implementada na branch `sprint-0-foundation`.
-- PR de homologação: #1.
-- Merge: pendente de CI verde + decisão humana.
-- Dados reais de produção: não autorizados no repositório público.
+## Segurança e dados
+
+- dataset público sintético;
+- sem CNPJ, telefone, nome de contato ou identificadores operacionais reais;
+- sem secrets ou tokens no frontend;
+- `npm audit --audit-level=high` no CI;
+- deploy somente após autorização explícita.
+
+## Performance
+
+O CI da Sprint 4 limita o maior bundle JavaScript principal a **250 KiB não comprimido**. O contrato JSON permanece separado do bundle.
+
+## Estado das sprints
+
+- Sprint 0 — fundação: homologada e mergeada.
+- Sprint 1 — dados/qualidade: homologada e mergeada.
+- Sprint 2 — analytics/contratos: homologada e mergeada.
+- Sprint 3 — dashboard MVP: homologada e mergeada.
+- Sprint 4 — qualidade de produto/engenharia: em validação.
+- Sprint 5 — Cloudflare/release: não iniciada.
+
+## Dados
+
+O dataset público de referência é sintético e existe apenas para tornar o case reproduzível e seguro.

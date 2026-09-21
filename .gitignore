@@ -9,3 +9,5 @@ web/dist/
 .env.*
 !.env.example
 .DS_Store
+
+data/processed/

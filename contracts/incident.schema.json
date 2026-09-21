@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://telecompulse.local/contracts/incident.schema.json",
+  "title": "TelecomPulse Incident",
+  "type": "object",
+  "required": [
+    "incident_id",
+    "site_id",
+    "carrier",
+    "opened_at",
+    "status",
+    "cause_category",
+    "source"
+  ],
+  "properties": {
+    "incident_id": {"type": "string", "minLength": 1},
+    "site_id": {"type": "string", "minLength": 1},
+    "carrier": {"type": "string", "minLength": 1},
+    "opened_at": {"type": "string", "format": "date-time"},
+    "restored_at": {"type": ["string", "null"], "format": "date-time"},
+    "status": {"type": "string", "enum": ["open", "resolved"]},
+    "cause_category": {"type": "string", "minLength": 1},
+    "region": {"type": ["string", "null"]},
+    "link_type": {"type": ["string", "null"]},
+    "source": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": true
+}

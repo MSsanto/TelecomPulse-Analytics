@@ -1,5 +1,5 @@
 import csv
-from pathlib import Path
+import pathlib
 
 
 REFERENCE_ROWS = [
@@ -54,7 +54,7 @@ REFERENCE_ROWS = [
 ]
 
 
-def generate_reference_dataset(path: Path) -> None:
+def generate_reference_dataset(path: pathlib.Path) -> None:
     """Write the public synthetic reference dataset used by tests and demos."""
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="", encoding="utf-8") as handle:

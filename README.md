@@ -124,3 +124,7 @@ O CI da Sprint 4 limita o maior bundle JavaScript principal a **250 KiB não com
 ## Dados
 
 O dataset público de referência é sintético e existe apenas para tornar o case reproduzível e seguro.
+
+### Operadoras no dataset
+
+O MVP usa nomes reais de operadoras — **Claro, Vivo e TIM** — para tornar a dimensão analítica mais reconhecível. Os eventos, sites, horários, causas e métricas são totalmente sintéticos e **não representam desempenho real, SLA, qualidade ou incidentes dessas empresas**.

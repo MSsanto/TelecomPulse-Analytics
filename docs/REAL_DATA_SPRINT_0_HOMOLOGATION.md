@@ -17,11 +17,17 @@ This is a final gate result, not an unfinished review. The Sprint R0 package was
 | G1 — canonical territory identity | PASS | 5 regions, 27 UFs, IBGE codes |
 | G2 — additive reconciliation mechanism | PASS | Sudeste reference snapshot + tests |
 | G3 — geography contract versioned | PASS | `geography-v2.schema.json` |
-| G4 — code/test baseline | PASS with CI confirmation required for Ruff | 6 local pytest tests + compileall |
+| G4 — code/test baseline | PASS | local 6/6 tests + GitHub Actions CI #172 fully green |
 | G5 — v1 compatibility preserved | PASS | no v1 contract replacement |
 | G6 — traceability rules documented | PASS | DATA_SOURCES + REAL_DATA_REBOOT + evidence |
 | G7 — official raw SMP/SCM download reproducible | **FAIL / BLOCKED** | ANATEL CSV host security/WAF block in this environment |
 | G8 — production raw hash/schema captured | **BLOCKED by G7** | no official raw bytes available here |
+
+## CI evidence
+
+GitHub Actions run #172 completed successfully across Python, web and Cloudflare-build jobs, including Ruff, pytest, npm audit, frontend tests/build, bundle budget, Wrangler deploy dry-run and static smoke tests.
+
+Validated commit: `c3782afdb5527b3bf7aa8d3537def93526164151`.
 
 ## Why this is NO-GO
 

@@ -10,6 +10,6 @@
 | Performance medida apenas por build/bundle | Baixo no MVP | Orçamento de bundle + arquitetura estática; medir Web Vitals após publicação |
 | npm ecosystem sofrer nova vulnerabilidade após homologação | Médio | CI executa audit high/critical; revisar antes de release |
 | 2 vulnerabilidades npm moderadas presentes na Sprint 4 | Médio | Gate high/critical passa; revisar atualização/remediação antes do release e não tratá-las como risco zero |
-| Cloudflare ainda não reproduzido pelo repositório | Médio | Sprint 5 dedicada a publicação/rollback |
+| Publicação Cloudflare ainda não executada | Baixo | Build, smoke test local e rollback já reproduzidos no repositório; publicação externa foi adiada e registrada no backlog |
 | Dados reais poderiam introduzir PII/segredos no futuro | Alto | Dataset público sintético por padrão e governança bloqueia publicação não autorizada |
 | Ausência de testes E2E em navegador real | Médio | Testes de componente cobrem fluxos prioritários; E2E pode ser adicionado se risco justificar |

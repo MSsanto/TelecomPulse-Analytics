@@ -1,5 +1,32 @@
 # TelecomPulse Analytics — Backlog
 
+## P0 — Real Data Reboot
+
+**Status:** em execução na branch `feat/real-data-reboot-sprint0`.
+
+### Objetivo imediato
+Validar e ingerir a primeira amostra real ANATEL + IBGE antes de implementar o mapa.
+
+### Itens
+- [x] arquitetura do reboot;
+- [x] catálogo inicial de fontes;
+- [x] contrato geográfico v2;
+- [x] epic Geographic Intelligence definido;
+- [ ] localizar recurso de download SMP;
+- [ ] localizar recurso de download SCM;
+- [ ] baixar amostra reproduzível;
+- [ ] registrar hash e metadados;
+- [ ] mapear aliases de operadoras;
+- [ ] validar chaves ANATEL ↔ IBGE;
+- [ ] provar SP → Sudeste → Brasil;
+- [ ] congelar contratos de apresentação v2;
+- [ ] validar estratégia SPA/deep-link antes do router.
+
+### Regra
+Nenhum dashboard real será implementado antes do gate de dados da Sprint R0.
+
+---
+
 ## P0 — Publicação Cloudflare
 
 **Status:** em correção / publicação iniciada  

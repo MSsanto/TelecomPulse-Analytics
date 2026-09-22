@@ -19,7 +19,7 @@ export const dashboardFixture: DashboardContract = {
   },
   by_carrier: [
     {
-      carrier: 'Carrier A',
+      carrier: 'Claro',
       incident_count: 1,
       resolved_incident_count: 1,
       open_incident_count: 0,
@@ -30,7 +30,7 @@ export const dashboardFixture: DashboardContract = {
       site_count: 1,
     },
     {
-      carrier: 'Carrier B',
+      carrier: 'Vivo',
       incident_count: 1,
       resolved_incident_count: 0,
       open_incident_count: 1,
@@ -109,7 +109,7 @@ export const dashboardFixture: DashboardContract = {
     {
       incident_id: 'INC-0001',
       site_id: 'SITE-001',
-      carrier: 'Carrier A',
+      carrier: 'Claro',
       opened_at: '2026-09-01T10:00:00+00:00',
       restored_at: '2026-09-01T11:00:00+00:00',
       status: 'resolved',
@@ -122,7 +122,7 @@ export const dashboardFixture: DashboardContract = {
     {
       incident_id: 'INC-0002',
       site_id: 'SITE-002',
-      carrier: 'Carrier B',
+      carrier: 'Vivo',
       opened_at: '2026-09-02T10:00:00+00:00',
       restored_at: null,
       status: 'open',

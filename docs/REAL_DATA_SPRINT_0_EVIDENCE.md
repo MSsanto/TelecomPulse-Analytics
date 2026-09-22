@@ -169,3 +169,12 @@ To close:
 6. re-run territorial reconciliation against the primary raw sample.
 
 Until R0-B01 is closed, the project must not label the reference snapshot as production ANATEL ingestion.
+
+
+## Mitigation evidence — raw capture
+
+Added a governed raw capture utility after the initial gate.
+
+The first CI attempt exposed a non-ASCII bytes literal in WAF detection; this was corrected before re-homologation. Final CI run #185 is fully green.
+
+The utility is deliberately not wired into normal CI network calls because the external ANATEL host is not a deterministic test dependency. Network-free unit tests validate URL allowlisting and WAF-page classification.

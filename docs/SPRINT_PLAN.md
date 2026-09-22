@@ -1,263 +1,114 @@
-# TelecomPulse Analytics — Plano de Sprints
+# TelecomPulse Analytics v2 — Plano de Reescrita
 
-## Convenção
+## Fase anterior — Protótipo sintético
 
-Sprints orientadas a entrega demonstrável. A duração recomendada é de **1 semana por sprint** para o MVP, mas o gate é qualidade/evidência, não calendário.
+Sprints 0–5 provaram:
+- governança;
+- pipeline;
+- testes;
+- contrato;
+- frontend;
+- CI/CD;
+- Cloudflare.
 
-Nenhuma sprint avança com bloqueio crítico não diagnosticado.
+**Status:** encerrada como ensaio técnico.
 
 ---
 
-## Sprint 0 — Fundação governada
+## Sprint R0 — Real Data Foundation
 
 ### Objetivo
-Transformar o repositório vazio em uma base de engenharia pronta para receber features.
+Trocar o centro de gravidade do projeto de incidentes sintéticos para dados públicos oficiais.
 
 ### Entregas
-- validar stack;
-- criar estrutura mínima;
-- definir dataset sintético;
-- especificar schema;
-- configurar Python/pytest/lint;
-- configurar frontend React/TypeScript/Vite;
-- configurar CI;
-- documentar comandos locais;
-- definir estratégia Cloudflare sem publicar;
-- capturar baseline técnico após bootstrap.
-
-### Critérios de aceite
-- pipeline mínimo executa;
-- teste mínimo passa;
-- lint passa;
-- frontend instala e builda;
-- CI reproduz essas verificações;
-- nenhum secret está versionado;
-- documentação de setup existe.
+- novo charter;
+- catálogo de fontes;
+- arquitetura v2;
+- modelo canônico de prestadora/serviço/período/geografia;
+- snapshots públicos de referência;
+- funções de market share e Top N;
+- testes de reconciliação;
+- documentação de proveniência.
 
 ### Gate
-**GO:** baseline verde e evidências registradas.  
-**NO-GO:** qualquer validador crítico vermelho sem causa compreendida.
+Nenhum dashboard v2 antes de fontes e contratos estarem validados.
 
 ---
 
-## Sprint 1 — Dados e qualidade
+## Sprint R1 — Ingestão Anatel SMP/SCM
 
 ### Objetivo
-Construir o núcleo confiável de dados antes de qualquer dashboard real.
+Automatizar acessos móveis e banda larga fixa.
 
 ### Entregas
-- gerador/dataset sintético;
-- contrato de incidente versionado;
-- ingestão;
-- validação;
-- normalização;
-- tratamento de duplicidades;
-- regras temporais;
-- relatório de qualidade;
-- testes de transformação.
+- download/versionamento lógico;
+- parser SMP;
+- parser SCM;
+- normalização de prestadoras;
+- normalização geográfica;
+- marts de acessos;
+- Top 5/10 dinâmico;
+- market share;
+- crescimento temporal.
 
-### KPIs ainda não visuais
-- incident_count;
-- downtime_minutes;
-- mttr_minutes;
-- recurrence_count;
-- disponibilidade inicial com tratamento de sobreposição definido.
-
-### Critérios de aceite
-- entradas inválidas são rejeitadas ou classificadas;
-- pipeline é determinístico;
-- fórmulas têm testes;
-- dataset processado é reproduzível;
-- relatório de qualidade é gerado.
-
-### Demonstração
-Executar raw → processed e comparar KPIs esperados do dataset de referência.
+### Gate
+Totais nacionais e rankings reconciliam com a fonte oficial.
 
 ---
 
-## Sprint 2 — Camada analítica e contrato do dashboard
+## Sprint R2 — Qualidade e Consumidor
 
 ### Objetivo
-Produzir datasets prontos para consumo do frontend sem duplicar lógica analítica na UI.
+Adicionar RQUAL, reclamações e satisfação sem fabricar score próprio.
 
 ### Entregas
-- agregações por período;
-- agregações por operadora;
-- agregações por unidade;
-- agregações por causa;
-- séries temporais;
-- contrato JSON/CSV do frontend;
-- documentação das métricas;
-- testes de consistência entre granularidades.
-
-### Critérios de aceite
-- totais reconciliam entre detalhe e agregados;
-- métricas possuem definição explícita;
-- contratos não dependem de conhecimento implícito do pipeline;
-- dados de apresentação têm tamanho adequado ao MVP.
-
-### Demonstração
-Gerar todos os artefatos que o frontend consumirá sem iniciar servidor backend.
+- IQS/Selos;
+- indicadores técnicos;
+- IR/reclamações;
+- IQP/ISG;
+- cruzamentos por serviço/prestadora/geografia/período;
+- regras explícitas para dado ausente.
 
 ---
 
-## Sprint 3 — Dashboard MVP
+## Sprint R3 — Dashboard Real v2
 
 ### Objetivo
-Tornar os dados analíticos navegáveis e compreensíveis.
+Substituir visualmente o dashboard sintético.
 
-### Entregas
-- layout base;
-- visão executiva;
-- cards de KPI;
-- evolução temporal;
-- operadoras;
-- unidades;
-- causas;
-- filtros;
-- tabela detalhada;
-- estados loading/empty/error;
-- indicação de dataset sintético;
-- responsividade.
+### Seções
+- panorama do mercado;
+- Top 5/10;
+- evolução;
+- qualidade;
+- consumidor;
+- cobertura/tecnologia;
+- geografia;
+- metodologia/fontes.
 
-### Critérios de aceite
-- frontend usa somente contratos da Sprint 2;
-- nenhum KPI crítico é recalculado silenciosamente no browser;
-- filtros produzem resultados coerentes;
-- build passa;
-- fluxo principal funciona em desktop e mobile;
-- acessibilidade básica verificada.
-
-### Demonstração
-Navegação completa local com dataset de referência.
+### Gate
+Nenhum rótulo sintético na página principal.
 
 ---
 
-## Sprint 4 — Qualidade de produto e engenharia
+## Sprint R4 — QA, metodologia e publicação
 
-### Objetivo
-Reduzir a diferença entre “demo que funciona” e produto de portfólio tecnicamente defensável.
-
-### Entregas
-- testes frontend prioritários;
-- revisão UX;
+- E2E;
 - acessibilidade;
-- tratamento de erros;
 - performance;
-- segurança;
-- revisão de dependências;
-- README completo;
-- arquitetura atualizada;
-- screenshots/evidências;
-- code review governado.
-
-### Critérios de aceite
-- validadores verdes;
-- sem erros críticos de console;
-- sem segredo/dado sensível;
-- navegação por teclado nos fluxos principais;
-- documentação permite reprodução por terceiro;
-- riscos residuais documentados.
-
-### Demonstração
-Rodada de homologação local completa.
+- SEO técnico;
+- data freshness;
+- smoke test público;
+- changelog;
+- release v2.
 
 ---
 
-## Sprint 5 — Preparação de release e publicação Cloudflare
+## Pós-v2
 
-### Estado
-**Preparação técnica concluída no GitHub. Publicação Cloudflare adiada para o backlog por decisão do proprietário.**
-
-### Objetivo
-Publicar somente o que já está tecnicamente homologado.
-
-### Pré-condição
-Deploy/publicação explicitamente autorizado.
-
-### Entregas
-- validar configuração Cloudflare;
-- confirmar projeto e domínio;
-- integração GitHub/Cloudflare ou fluxo reproduzível equivalente;
-- build de produção;
-- deploy;
-- smoke test;
-- validação de rotas/assets;
-- evidência da versão publicada;
-- documentação de rollback;
-- tag/release do MVP.
-
-### Critérios de aceite
-- build publicado corresponde ao commit homologado;
-- URL pública funciona;
-- assets e rotas respondem corretamente;
-- nenhum segredo foi exposto;
-- smoke test registrado;
-- rollback documentado.
-
-### Demonstração
-A preparação técnica já foi demonstrada por build de produção e smoke test local. A demonstração pública fica pendente até a retomada do item `P0 — Publicação Cloudflare` em `docs/BACKLOG.md`.
-
----
-
-# Pós-MVP
-
-## Sprint 6 — Insights avançados
-Possíveis itens:
 - comparação de períodos;
-- heatmap temporal;
-- Pareto de causas;
-- tendência de MTTR;
-- reincidência por link;
-- indicadores de concentração de risco.
-
-## Sprint 7 — Backend somente se necessário
-Avaliar:
-- Cloudflare Workers;
-- D1;
-- API;
-- atualização incremental;
-- autenticação.
-
-**Não iniciar sem requisito comprovado.**
-
-## Sprint 8 — Observabilidade e operação
-Caso o produto deixe de ser somente estático:
-- logging;
-- métricas;
-- health checks;
-- tracing quando aplicável;
-- alertas;
-- runbook.
-
----
-
-# Macro-roadmap
-
-```text
-Sprint 0  Fundação
-   ↓
-Sprint 1  Dados confiáveis
-   ↓
-Sprint 2  Analytics/contratos
-   ↓
-Sprint 3  Dashboard
-   ↓
-Sprint 4  Qualidade/homologação
-   ↓
-Sprint 5  Cloudflare/release
-   ↓
-Pós-MVP
-```
-
-# Regra de priorização
-
-Prioridade:
-1. corretude dos dados;
-2. rastreabilidade;
-3. valor analítico;
-4. usabilidade;
-5. estética;
-6. sofisticação arquitetural.
-
-Uma visualização bonita nunca compensa KPI incorreto.
+- HHI/concentração;
+- mapa municipal;
+- séries históricas longas;
+- download de datasets tratados;
+- API somente se houver necessidade comprovada.

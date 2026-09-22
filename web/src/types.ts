@@ -1,51 +1,49 @@
-export type MetricRow = {
-  incident_count: number
-  resolved_incident_count: number
-  open_incident_count: number
-  downtime_minutes: number
-  mttr_minutes: number
-  recurrence_count: number
-  availability_pct: number
-  site_count: number
+export type ProviderShare = {
+  provider: string
+  value: number
+  unit: string
 }
 
-export type CarrierMetric = MetricRow & { carrier: string }
-export type SiteMetric = MetricRow & { site_id: string }
-export type CauseMetric = MetricRow & { cause_category: string }
-
-export type TimelineRow = {
-  opened_date: string
-  incident_count: number
-  resolved_incident_count: number
-  open_incident_count: number
-  downtime_minutes: number
+export type MarketSection = {
+  service_name: string
+  period: string
+  geography: string
+  total_accesses: number
+  accesses_5g?: number | null
+  share_5g_pct?: number | null
+  fiber_accesses?: number | null
+  provider_market_share: ProviderShare[]
+  ranking_complete: boolean
 }
 
-export type Incident = {
-  incident_id: string
-  site_id: string
-  carrier: string
-  opened_at: string
-  restored_at: string | null
-  status: 'open' | 'resolved'
-  cause_category: string
-  region: string
-  link_type: string
-  source: string
-  downtime_minutes: number | null
+export type SatisfactionRow = {
+  service: string
+  provider: string
+  isg: number
 }
 
-export type DashboardContract = {
-  contract_version: '1.0'
-  generated_from: string
-  window: {
-    start: string
-    end: string
+export type PublicSource = {
+  source_id: string
+  service: string
+  kind: string
+  frequency: string
+  landing_url: string
+  format?: string
+  glossary_url?: string
+}
+
+export type DashboardContractV2 = {
+  contract_version: '2.0'
+  data_mode: 'official_public'
+  authority: string
+  market: {
+    SMP: MarketSection
+    SCM: MarketSection
   }
-  summary: MetricRow
-  by_carrier: CarrierMetric[]
-  by_site: SiteMetric[]
-  by_cause: CauseMetric[]
-  timeline: TimelineRow[]
-  incidents: Incident[]
+  satisfaction: {
+    year: number
+    rows: SatisfactionRow[]
+  }
+  sources: PublicSource[]
+  methodology_notes: string[]
 }

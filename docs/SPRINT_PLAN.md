@@ -261,3 +261,96 @@ Prioridade:
 6. sofisticação arquitetural.
 
 Uma visualização bonita nunca compensa KPI incorreto.
+
+
+---
+
+# TelecomPulse v2 — Real Data Reboot
+
+A v1 sintética permanece como baseline histórico. O roadmap abaixo governa a nova linha de produto baseada em dados públicos reais.
+
+## Sprint R0 — Fontes, contrato e território
+
+### Objetivo
+Fechar as fontes oficiais, identidade de operadoras, dimensão territorial e regras de rastreabilidade antes de qualquer visualização real.
+
+### Entregas
+- `docs/DATA_SOURCES.md`;
+- `docs/REAL_DATA_REBOOT.md`;
+- contrato geográfico v2;
+- matriz fonte × métrica × granularidade × período;
+- prova de acesso a SMP/SCM;
+- amostra ANATEL + IBGE;
+- primeira reconciliação SP → Sudeste → Brasil.
+
+### Gate
+**GO:** fontes primárias acessíveis, joins demonstrados e reconciliação das métricas aditivas.  
+**NO-GO:** fonte sem download reproduzível, operadora não normalizável ou divergência territorial sem diagnóstico.
+
+## Sprint R1 — Ingestão real
+
+- aquisição reproduzível ANATEL SMP/SCM;
+- armazenamento raw imutável;
+- metadados de coleta;
+- hashes;
+- schema checks;
+- aliases de operadoras;
+- normalização territorial;
+- testes.
+
+## Sprint R2 — Analytics territoriais
+
+- Brasil;
+- 5 regiões;
+- 27 UFs;
+- market share;
+- crescimento;
+- séries;
+- densidade com IBGE;
+- reconciliação entre granularidades;
+- contratos v2.
+
+## Sprint R3 — Presentation layer
+
+- `catalog.json`;
+- `brazil.json`;
+- arquivos regionais;
+- arquivos estaduais;
+- lineage;
+- testes de schema e tamanho.
+
+## Sprint R4 — Navegação geográfica
+
+- router;
+- `BrazilPage`;
+- `RegionPage`;
+- `StatePage`;
+- mapa SVG;
+- navegação alternativa acessível;
+- deep links;
+- estados loading/empty/error.
+
+## Sprint R5 — Qualidade, reclamações, satisfação e cobertura
+
+Somente após validar granularidade e metodologia oficial de cada indicador.
+
+## Sprint R6 — Homologação e release
+
+- testes Python/frontend;
+- reconciliação completa;
+- acessibilidade;
+- segurança;
+- performance;
+- documentação;
+- smoke test;
+- publicação somente mediante autorização explícita.
+
+## Prioridade v2
+
+1. fonte oficial;
+2. rastreabilidade;
+3. corretude;
+4. reconciliação;
+5. valor analítico;
+6. usabilidade;
+7. estética.

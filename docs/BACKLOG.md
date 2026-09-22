@@ -2,7 +2,7 @@
 
 ## P0 — Publicação Cloudflare
 
-**Status:** backlog / não iniciado externamente  
+**Status:** em correção / publicação iniciada  
 **Motivo:** decisão do proprietário de concluir primeiro o trabalho no GitHub e executar o deploy Cloudflare depois.
 
 ### Pré-condições já concluídas
@@ -19,12 +19,12 @@
 
 ### Quando retomar
 
-1. conectar o projeto Cloudflare Pages ao repositório `MSsanto/TelecomPulse-Analytics`;
-2. usar branch de produção `main`;
-3. build command: `bash scripts/build-cloudflare.sh`;
-4. output directory: `web/dist`;
-5. confirmar Python 3.13 e Node 22;
-6. executar deploy;
+1. confirmar no Workers Builds o Build command `bash scripts/build-cloudflare.sh`;
+2. manter Deploy command `npx wrangler deploy`;
+3. usar branch de produção `main`;
+4. confirmar Python 3.13 e Node 22;
+5. deixar `wrangler.jsonc` apontar para `./web/dist`;
+6. executar novo deploy;
 7. validar URL pública;
 8. executar smoke test público;
 9. validar headers;

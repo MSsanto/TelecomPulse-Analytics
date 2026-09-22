@@ -66,6 +66,8 @@ jobs:
         with:
           node-version: '22'
       - run: bash scripts/build-cloudflare.sh
+      - name: Wrangler production deploy dry-run
+        run: npx wrangler@4.136.3 deploy --dry-run --outdir .wrangler-dry-run
       - name: Local static smoke test
         run: |
           python -m http.server 4173 --directory web/dist >/tmp/telecompulse-http.log 2>&1 &

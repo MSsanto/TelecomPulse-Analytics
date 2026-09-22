@@ -2,7 +2,7 @@
 
 TelecomPulse Analytics é um case de engenharia de dados + analytics + frontend para operações de telecom/NOC. O projeto transforma eventos sintéticos de indisponibilidade em métricas operacionais rastreáveis e em um dashboard web estático.
 
-> Status: **MVP técnico concluído no GitHub. Deploy Cloudflare adiado e registrado no backlog.**
+> Status: **MVP técnico concluído. Publicação Cloudflare Workers em correção de configuração de build/assets.**
 
 ## O que o MVP responde
 
@@ -20,7 +20,7 @@ TelecomPulse Analytics é um case de engenharia de dados + analytics + frontend 
 
 ## Arquitetura
 
-`CSV sintético → Python/Pandas → validação/normalização → analytics → dashboard-v1.json/CSVs → React/TypeScript/Vite → build estático → Cloudflare (Sprint 5)`
+`CSV sintético → Python/Pandas → validação/normalização → analytics → dashboard-v1.json/CSVs → React/TypeScript/Vite → build estático → Cloudflare Workers Static Assets`
 
 O frontend não recalcula KPIs críticos. Cards, rankings e timeline consomem os agregados homologados produzidos pelo pipeline.
 
@@ -119,7 +119,7 @@ O CI da Sprint 4 limita o maior bundle JavaScript principal a **250 KiB não com
 - Sprint 2 — analytics/contratos: homologada e mergeada.
 - Sprint 3 — dashboard MVP: homologada e mergeada.
 - Sprint 4 — qualidade de produto/engenharia: homologada e mergeada.
-- Sprint 5 — preparação de release: concluída no GitHub; publicação Cloudflare adiada para o backlog.
+- Sprint 5 — release: publicação Cloudflare Workers em correção final; `wrangler.jsonc` versionado para `web/dist`.
 
 ## Dados
 

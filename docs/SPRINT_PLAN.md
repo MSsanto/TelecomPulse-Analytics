@@ -287,6 +287,12 @@ Fechar as fontes oficiais, identidade de operadoras, dimensão territorial e reg
 **GO:** fontes primárias acessíveis, joins demonstrados e reconciliação das métricas aditivas.  
 **NO-GO:** fonte sem download reproduzível, operadora não normalizável ou divergência territorial sem diagnóstico.
 
+### Homologação final R0 — 2026-09-22
+
+**NO-GO por bloqueio externo único:** a documentação e o catálogo oficiais da ANATEL foram validados, porém o host de CSV bloqueou o download automatizado neste ambiente. O projeto não reduz o critério de aceite retroativamente.
+
+A dimensão territorial, contrato, reconciliação de referência e testes estão concluídos. O único gate bloqueante é capturar bytes raw oficiais SMP/SCM, seus hashes e schema real.
+
 ## Sprint R1 — Ingestão real
 
 - aquisição reproduzível ANATEL SMP/SCM;

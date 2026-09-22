@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://telecompulse.local/contracts/public-market-v1.schema.json",
+  "title": "TelecomPulse Public Market Observation v1",
+  "type": "object",
+  "required": [
+    "service",
+    "period",
+    "geography",
+    "provider",
+    "metric",
+    "value",
+    "unit",
+    "source_id"
+  ],
+  "properties": {
+    "service": {"enum": ["SMP", "SCM"]},
+    "period": {"type": "string", "minLength": 4},
+    "geography": {"type": "string", "minLength": 2},
+    "provider": {"type": "string", "minLength": 1},
+    "metric": {"type": "string", "minLength": 1},
+    "value": {"type": "number"},
+    "unit": {"type": "string", "minLength": 1},
+    "source_id": {"type": "string", "minLength": 1}
+  },
+  "additionalProperties": false
+}

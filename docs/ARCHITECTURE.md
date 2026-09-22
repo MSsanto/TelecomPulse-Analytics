@@ -1,224 +1,144 @@
-# TelecomPulse Analytics — Arquitetura inicial
+# TelecomPulse Analytics v2 — Arquitetura
 
-## Status
+## Estado
 
-**Arquitetura implementada até a Sprint 4.** O frontend estático e a camada analítica estão funcionais e validados por CI. Publicação Cloudflare permanece para a Sprint 5.
+**Real Data Reboot em construção.**
 
-## Princípios
-
-1. Dados antes de dashboard.
-2. Métrica sem fórmula documentada não entra.
-3. Dataset público não pode conter segredo ou dado operacional sensível.
-4. Complexidade deve ser adicionada somente quando resolver necessidade concreta.
-5. Frontend não recalcula regras analíticas críticas que pertencem ao pipeline.
-6. Saídas processadas devem ser determinísticas e rastreáveis.
+A arquitetura sintética anterior foi validada e permanece no histórico Git. A arquitetura principal agora é orientada a fontes públicas reais.
 
 ## Fluxo
 
 ```text
-data/raw
-   ↓
-ingestão
-   ↓
-validação de schema
-   ↓
-limpeza e normalização
-   ↓
-modelo analítico / KPIs
-   ↓
-data/processed
-   ↓
-artefatos JSON/CSV
-   ↓
-React + Vite
-   ↓
-build estático
-   ↓
-Cloudflare
+Anatel / dados.gov.br
+        ↓
+source registry + provenance
+        ↓
+raw snapshots imutáveis
+        ↓
+staging / schema validation
+        ↓
+normalização canônica
+  prestadora | serviço | geografia | período
+        ↓
+marts analíticos
+  market | quality | consumer | coverage
+        ↓
+contratos versionados JSON/CSV
+        ↓
+React / TypeScript
+        ↓
+Cloudflare Workers Static Assets
 ```
 
 ## Camadas
 
-### 1. Raw
+### 1. Source registry
 
-Entrada imutável do pipeline.
+Responsável por:
+- nome da fonte;
+- órgão mantenedor;
+- URL de landing page;
+- URL/download quando estável;
+- periodicidade;
+- granularidade;
+- licença/atribuição;
+- data de aquisição;
+- status de disponibilidade.
+
+### 2. Raw
+
+Snapshots da fonte sem transformação de negócio.
 
 Regras:
-- nunca corrigir manualmente o arquivo bruto durante processamento;
-- manter origem e versão identificáveis;
-- dataset público do MVP deve ser sintético ou autorizado.
+- não editar arquivos raw manualmente;
+- registrar checksum quando possível;
+- preservar nome/período da origem;
+- fonte grande pode ser baixada no pipeline e não versionada no Git.
 
-### 2. Validation
+### 3. Staging
 
-Responsável por:
-- tipos;
-- campos obrigatórios;
-- datas;
-- duração;
-- enumerações;
-- duplicidades;
-- integridade referencial mínima.
+Converte cada fonte para tipos e colunas previsíveis:
+- datas/períodos;
+- códigos geográficos;
+- nomes de prestadoras;
+- serviço;
+- medidas numéricas.
 
-### 3. Transform
+### 4. Canonical dimensions
 
-Responsável por:
-- padronização de operadora;
-- unidade/site;
-- categorias de causa;
-- timestamps;
-- duração;
-- dimensões temporais;
-- chaves técnicas.
+#### provider
+Mantém:
+- `provider_id`;
+- `display_name`;
+- nome/grupo informado pela fonte;
+- aliases;
+- vigência temporal quando necessário.
 
-### 4. Analytics
+#### service
+Valores iniciais:
+- `SMP`;
+- `SCM`.
 
-Responsável por derivar:
-- incident_count;
-- downtime_minutes;
-- mttr_minutes;
-- availability_pct;
-- recurrence_count;
-- indicadores por operadora, unidade, causa e período;
-- métricas de qualidade.
+#### geography
+- Brasil;
+- região;
+- UF;
+- município;
+- código IBGE quando disponível.
 
-### 5. Presentation datasets
+#### period
+Preferir `YYYY-MM`, `YYYY-Qn` ou ano de referência, conforme a fonte.
 
-Arquivos enxutos preparados especificamente para consumo pelo dashboard.
+### 5. Marts
 
-### 6. Frontend
+#### market
+- accesses;
+- market_share_pct;
+- growth;
+- rank;
+- top_n.
 
-Responsável por:
-- visualização;
-- filtros;
-- navegação;
-- explicação das métricas;
-- estado vazio/erro;
-- acessibilidade.
+#### quality
+- IQS;
+- selo;
+- indicadores técnicos do RQUAL.
 
-Não deve conter lógica escondida que altere a definição dos KPIs.
+#### consumer
+- IR/reclamações por mil acessos;
+- IQP/ISG;
+- satisfação.
 
-## Stack proposta
+#### coverage
+- cobertura;
+- tecnologia;
+- indicadores associados quando disponíveis.
 
-### Dados
-- Python 3.13;
-- Pandas;
-- testes com pytest;
-- formato raw: CSV;
-- formato processado: CSV/JSON no MVP;
-- Parquet pode ser usado internamente quando trouxer benefício mensurável.
+## Regra de reconciliação
 
-### Frontend
-- React;
-- TypeScript;
-- Vite;
-- gráficos com biblioteca a escolher na Sprint 2 após prova de adequação;
-- CSS simples e responsivo.
+Métricas derivadas devem reconciliar com a granularidade da fonte.
 
-### Hospedagem
-- Cloudflare para o frontend.
-- Workers/D1: **não usar no MVP sem requisito que justifique backend em runtime**.
+Exemplo:
+`market_share = accesses_provider / accesses_market`
 
-## Estrutura alvo
+Não calcular participação usando universos diferentes.
 
-```text
-TelecomPulse-Analytics/
-├── .github/
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── samples/
-├── docs/
-├── src/
-│   └── telecom_pulse/
-│       ├── ingest/
-│       ├── validation/
-│       ├── transform/
-│       └── analytics/
-├── tests/
-├── web/
-├── scripts/
-├── README.md
-├── pyproject.toml
-└── ...
-```
+## Frontend
 
-A estrutura é alvo; diretórios só devem ser criados quando utilizados.
+O browser:
+- formata;
+- filtra;
+- ordena;
+- apresenta.
 
-## Contrato conceitual de incidente
+O browser não deve recriar regras regulatórias ou metodologias da Anatel.
 
-Campos mínimos propostos:
+## Deploy
 
-| Campo | Tipo | Obrigatório | Observação |
-|---|---|---:|---|
-| incident_id | string | sim | identificador sintético/técnico |
-| site_id | string | sim | unidade anonimizada |
-| carrier | string | sim | operadora normalizada |
-| opened_at | datetime | sim | início |
-| restored_at | datetime/null | condicional | fim |
-| status | enum | sim | open/resolved |
-| cause_category | string | sim | categoria normalizada |
-| region | string | não | agrupamento geográfico |
-| link_type | string | não | fibra, rádio etc. |
-| source | string | sim | rastreabilidade |
+O build continua estático:
+- Python produz contratos;
+- Vite compila a UI;
+- Wrangler publica `web/dist`.
 
-## Fórmulas iniciais
+## Legado sintético
 
-### Downtime
-`restored_at - opened_at` para incidentes resolvidos.
-
-### MTTR
-`soma(duração dos incidentes resolvidos) / quantidade de incidentes resolvidos`.
-
-### Disponibilidade
-
-Para uma entidade e janela de análise:
-
-`availability = 1 - (downtime / tempo_total_da_janela)`
-
-A Sprint 1 deve tratar sobreposição de incidentes antes de homologar a fórmula para agregações.
-
-## Segurança e privacidade
-
-- sem secrets no Git;
-- sem tokens Cloudflare no frontend;
-- sem dados pessoais;
-- sem dados corporativos não autorizados;
-- qualquer variável sensível via secret manager/variável de ambiente;
-- dataset sintético identificado visualmente como tal.
-
-## Evolução pós-MVP
-
-Backend em runtime poderá ser avaliado quando houver:
-- volume incompatível com artefatos estáticos;
-- atualização frequente;
-- necessidade de autenticação;
-- filtros/consultas server-side;
-- ingestão contínua;
-- persistência multiusuário.
-
-Até lá, adicionar D1, Workers ou API seria complexidade sem requisito.
-
-
-## Estado implementado até Sprint 4
-
-- ingestão CSV sintético;
-- normalização e validação em Python/Pandas;
-- métricas analíticas testadas;
-- contrato dashboard v1;
-- artefatos JSON/CSV de apresentação;
-- React/TypeScript/Vite;
-- testes de componente com Vitest/Testing Library;
-- CI com Ruff, pytest, frontend tests, npm audit e budget de bundle;
-- build estático contendo o contrato em `dist/data/dashboard-v1.json`.
-
-## Decisão de runtime
-
-O MVP continua sem API, Worker ou D1. O dashboard é compilado como site estático e consome um contrato JSON gerado antes do build.
-
-Essa decisão reduz:
-- superfície de ataque;
-- custo operacional;
-- dependências de runtime;
-- complexidade de deploy.
-
-Uma camada de backend só deverá ser introduzida quando atualização frequente, autenticação, volume ou consultas server-side justificarem a mudança.
+O pipeline de incidentes existente é considerado legado de prototipação. Ele será removido do caminho principal depois que os novos contratos reais cobrirem o dashboard v2.

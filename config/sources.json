@@ -1,0 +1,52 @@
+{
+  "registry_version": "1.0",
+  "primary_authority": "Agência Nacional de Telecomunicações - Anatel",
+  "sources": [
+    {
+      "source_id": "ANATEL_OPEN_DATA",
+      "service": "MULTI",
+      "kind": "catalog",
+      "frequency": "varies",
+      "landing_url": "https://www.gov.br/anatel/pt-br/dados/dados-abertos"
+    },
+    {
+      "source_id": "ANATEL_SMP_ACCESS",
+      "service": "SMP",
+      "kind": "accesses",
+      "frequency": "monthly",
+      "format": "CSV",
+      "landing_url": "https://www.gov.br/anatel/pt-br/regulado/universalizacao/coletas-de-dados-de-acessos",
+      "glossary_url": "https://www.anatel.gov.br/dadosabertos/PDA/Acessos/SMP/Glossario.pdf"
+    },
+    {
+      "source_id": "ANATEL_SCM_ACCESS",
+      "service": "SCM",
+      "kind": "accesses",
+      "frequency": "monthly",
+      "format": "CSV",
+      "landing_url": "https://www.gov.br/anatel/pt-br/regulado/universalizacao/coletas-de-dados-de-acessos",
+      "glossary_url": "https://www.anatel.gov.br/dadosabertos/PDA/Acessos/SCM/Glossario.pdf"
+    },
+    {
+      "source_id": "ANATEL_RQUAL",
+      "service": "MULTI",
+      "kind": "quality",
+      "frequency": "semiannual_annual",
+      "landing_url": "https://www.gov.br/anatel/pt-br/dados/qualidade/qualidade-dos-servicos/resultados/copy_of_qualidade-dos-servicos"
+    },
+    {
+      "source_id": "ANATEL_SATISFACTION_2025",
+      "service": "MULTI",
+      "kind": "satisfaction",
+      "frequency": "annual",
+      "landing_url": "https://www.gov.br/anatel/pt-br/consumidor/pesquisa-de-satisfacao-e-qualidade/satisfacao-e-qualidade-percebida"
+    },
+    {
+      "source_id": "ANATEL_COMPETITION_2026Q2",
+      "service": "MULTI",
+      "kind": "competition_report",
+      "frequency": "quarterly",
+      "landing_url": "https://www.gov.br/anatel/pt-br/assuntos/noticias/anatel-divulga-relatorio-de-monitoramento-da-competicao-do-segundo-trimestre-de-2026"
+    }
+  ]
+}

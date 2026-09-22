@@ -19,63 +19,51 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
-describe('TelecomPulse dashboard', () => {
-  it('renders loading then the governed dashboard contract', async () => {
+describe('TelecomPulse v2 public dashboard', () => {
+  it('renders official public data instead of synthetic NOC metrics', async () => {
     mockFetchOk()
     render(<App />)
 
-    expect(screen.getByText(/Carregando dados operacionais/i)).toBeInTheDocument()
+    expect(screen.getByText(/Carregando dados oficiais/i)).toBeInTheDocument()
     expect(await screen.findByRole('heading', { name: /TelecomPulse/i })).toBeInTheDocument()
-    expect(screen.getByText('Dataset sintético')).toBeInTheDocument()
-    expect(screen.getByText('99,5%')).toBeInTheDocument()
-    expect(screen.getByText('INC-0001')).toBeInTheDocument()
+    expect(screen.getByText('Dados públicos oficiais')).toBeInTheDocument()
+    expect(screen.getByText('37,9%')).toBeInTheDocument()
+    expect(screen.queryByText(/MTTR/i)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Downtime/i)).not.toBeInTheDocument()
   })
 
-  it('filters incident detail without replacing executive KPI content', async () => {
+  it('switches satisfaction service without changing market facts', async () => {
     mockFetchOk()
     const user = userEvent.setup()
     render(<App />)
 
-    await screen.findByText('INC-0001')
-    await user.selectOptions(screen.getByLabelText('Operadora'), 'Carrier B')
-
-    expect(screen.queryByText('INC-0001')).not.toBeInTheDocument()
-    expect(screen.getByText('INC-0002')).toBeInTheDocument()
-    expect(screen.getByText('99,5%')).toBeInTheDocument()
-    expect(screen.getByText(/Exibindo/i)).toHaveTextContent('1 de 2')
-  })
-
-  it('renders the empty contract state', async () => {
-    mockFetchOk({ ...dashboardFixture, incidents: [] })
-    render(<App />)
-
-    expect(
-      await screen.findByRole('heading', { name: /não há incidentes para exibir/i }),
-    ).toBeInTheDocument()
-  })
-
-  it('renders a useful error state when contract loading fails', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue({
-        ok: false,
-        status: 500,
-      }),
+    await screen.findByText('Brisanet')
+    await user.selectOptions(
+      screen.getByLabelText('Serviço da pesquisa de satisfação'),
+      'celular_pos_pago',
     )
+
+    expect(screen.queryByText('Brisanet')).not.toBeInTheDocument()
+    expect(screen.getAllByText('Vivo').length).toBeGreaterThan(0)
+    expect(screen.getByText('37,9%')).toBeInTheDocument()
+  })
+
+  it('renders a useful HTTP error state', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 500 }))
     render(<App />)
 
     expect(
-      await screen.findByRole('heading', { name: /não foi possível carregar/i }),
+      await screen.findByRole('heading', { name: /não foi possível carregar os dados públicos/i }),
     ).toBeInTheDocument()
     expect(screen.getByRole('alert')).toHaveTextContent('HTTP 500')
   })
 
-  it('rejects an incompatible contract version', async () => {
-    mockFetchOk({ ...dashboardFixture, contract_version: '2.0' as '1.0' })
+  it('rejects a synthetic or incompatible contract', async () => {
+    mockFetchOk({ ...dashboardFixture, data_mode: 'synthetic' as 'official_public' })
     render(<App />)
 
     await waitFor(() => {
-      expect(screen.getByRole('alert')).toHaveTextContent('Contrato incompatível')
+      expect(screen.getByRole('alert')).toHaveTextContent('Contrato público incompatível')
     })
   })
 })

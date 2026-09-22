@@ -20,14 +20,18 @@ jobs:
       - run: pip install -e '.[dev]'
       - run: ruff check src tests
       - run: pytest -q
-      - run: python -m telecom_pulse.cli
-      - run: python -m telecom_pulse.presentation_cli
-      - run: test -f data/presentation/dashboard-v1.json
-      - run: test -f data/presentation/by_carrier.csv
-      - run: test -f data/presentation/by_site.csv
-      - run: test -f data/presentation/by_cause.csv
-      - run: test -f data/presentation/timeline.csv
-      - run: test -f data/presentation/incidents.csv
+      - name: Build official public dashboard contract
+        run: python -m telecom_pulse.public_cli
+      - name: Validate v2 contract identity
+        run: |
+          test -f data/presentation/dashboard-v2.json
+          grep -q '"data_mode": "official_public"' data/presentation/dashboard-v2.json
+          grep -q '"contract_version": "2.0"' data/presentation/dashboard-v2.json
+      - name: Reject synthetic NOC metrics from v2 contract
+        run: |
+          ! grep -q '"incident_count"' data/presentation/dashboard-v2.json
+          ! grep -q '"downtime_minutes"' data/presentation/dashboard-v2.json
+          ! grep -q '"mttr_minutes"' data/presentation/dashboard-v2.json
 
   web:
     runs-on: ubuntu-latest
@@ -47,7 +51,7 @@ jobs:
       - run: npm run audit:high
       - run: npm test
       - run: npm run build
-      - run: test -f dist/data/dashboard-v1.json
+      - run: test -f dist/data/dashboard-v2.json
       - name: Enforce JavaScript bundle budget
         run: |
           size=$(find dist/assets -name 'index-*.js' -printf '%s\n' | sort -nr | head -1)
@@ -75,4 +79,5 @@ jobs:
           trap 'kill $server_pid' EXIT
           sleep 1
           curl --fail --silent --show-error http://127.0.0.1:4173/ | grep -q "TelecomPulse Analytics"
-          curl --fail --silent --show-error http://127.0.0.1:4173/data/dashboard-v1.json | grep -q '"contract_version": "1.0"'
+          curl --fail --silent --show-error http://127.0.0.1:4173/data/dashboard-v2.json | grep -q '"contract_version": "2.0"'
+          curl --fail --silent --show-error http://127.0.0.1:4173/data/dashboard-v2.json | grep -q '"data_mode": "official_public"'

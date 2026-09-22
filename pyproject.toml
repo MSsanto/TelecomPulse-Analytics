@@ -4,10 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "telecompulse-analytics"
-version = "0.1.0"
-description = "Governed telecom/NOC analytics pipeline"
+version = "0.2.0"
+description = "Brazilian telecom market and quality analytics from public official data"
 requires-python = ">=3.13"
-dependencies = ["pandas>=2.2,<3"]
+dependencies = [
+    "pandas>=2.2,<3",
+    "requests>=2.32,<3"
+]
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<9", "ruff>=0.8,<1"]

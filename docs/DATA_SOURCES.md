@@ -2,7 +2,7 @@
 
 ## Status
 
-Sprint 0 / Real Data Reboot.
+Sprint R0 / Real Data Reboot — final gate executed. See `docs/REAL_DATA_SPRINT_0_HOMOLOGATION.md`.
 
 Nenhum dataset entra na camada analítica sem:
 - proprietário/fonte identificada;
@@ -104,13 +104,21 @@ Podem ser usadas para conferência, nunca como fonte primária quando existir da
 3. Fontes setoriais secundárias — validação.
 4. Conteúdo editorial/social — fora do pipeline analítico.
 
-## Próximos gates
+## Sprint R0 — gate de fontes
 
-- [ ] identificar o recurso/arquivo exato de acessos SMP;
-- [ ] identificar o recurso/arquivo exato de acessos SCM;
-- [ ] baixar amostra real;
-- [ ] registrar hash, data de coleta e metadados;
-- [ ] mapear nomes reais das operadoras;
-- [ ] validar join territorial com IBGE;
-- [ ] validar SP → Sudeste → Brasil;
-- [ ] congelar schema v2 de apresentação.
+- [x] confirmar catálogo oficial ANATEL para acessos SMP/SCM;
+- [x] confirmar CSV e granularidades geográficas documentadas;
+- [x] validar códigos territoriais oficiais do IBGE;
+- [x] implementar dimensão Brasil → Região → UF;
+- [x] executar prova aritmética SP + MG + RJ + ES → Sudeste em snapshot de validação;
+- [ ] baixar bytes brutos oficiais SMP de forma reproduzível;
+- [ ] baixar bytes brutos oficiais SCM de forma reproduzível;
+- [ ] registrar SHA-256, data de coleta e schema real dos arquivos oficiais;
+- [ ] validar aliases reais de operadoras no arquivo bruto;
+- [ ] executar reconciliação territorial usando diretamente a fonte primária.
+
+### Limitação observada
+
+O host de arquivos CSV da ANATEL bloqueou a recuperação automatizada neste ambiente por mecanismo de segurança/WAF. A existência, o formato e as granularidades da fonte foram validados pela documentação oficial, mas a Sprint R0 não declara ingestão raw concluída sem os bytes oficiais.
+
+Detalhes: `docs/REAL_DATA_SPRINT_0_EVIDENCE.md`.

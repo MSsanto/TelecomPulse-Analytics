@@ -164,7 +164,10 @@ Rodada de homologação local completa.
 
 ---
 
-## Sprint 5 — Cloudflare e homologação pública
+## Sprint 5 — Preparação de release e publicação Cloudflare
+
+### Estado
+**Preparação técnica concluída no GitHub. Publicação Cloudflare adiada para o backlog por decisão do proprietário.**
 
 ### Objetivo
 Publicar somente o que já está tecnicamente homologado.
@@ -193,7 +196,7 @@ Deploy/publicação explicitamente autorizado.
 - rollback documentado.
 
 ### Demonstração
-MVP público navegável e rastreável ao commit/release.
+A preparação técnica já foi demonstrada por build de produção e smoke test local. A demonstração pública fica pendente até a retomada do item `P0 — Publicação Cloudflare` em `docs/BACKLOG.md`.
 
 ---
 

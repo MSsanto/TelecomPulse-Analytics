@@ -52,10 +52,39 @@ def test_normalization_is_deterministic(tmp_path: Path) -> None:
     generated = tmp_path / "generated.csv"
     generate_reference_dataset(generated)
     frame = load_incidents(generated)
-    assert frame.loc[0, "carrier"] == "Carrier A"
+    assert frame.loc[0, "carrier"] == "Claro"
     assert frame.loc[0, "status"] == "resolved"
     assert frame.loc[0, "cause_category"] == "fiber_break"
     assert frame.loc[0, "link_type"] == "fiber"
+
+
+def test_carrier_normalization_preserves_real_brand_casing() -> None:
+    frame = pd.DataFrame(
+        {
+            "incident_id": ["x", "y", "z"],
+            "site_id": ["S1", "S2", "S3"],
+            "carrier": ["claro empresas", "TELEFÔNICA", "tim brasil"],
+            "opened_at": [
+                "2026-09-01T10:00:00Z",
+                "2026-09-01T10:00:00Z",
+                "2026-09-01T10:00:00Z",
+            ],
+            "restored_at": [
+                "2026-09-01T11:00:00Z",
+                "2026-09-01T11:00:00Z",
+                "2026-09-01T11:00:00Z",
+            ],
+            "status": ["resolved", "resolved", "resolved"],
+            "cause_category": ["power", "power", "power"],
+            "region": ["SE", "SE", "SE"],
+            "link_type": ["fiber", "fiber", "fiber"],
+            "source": ["synthetic", "synthetic", "synthetic"],
+        }
+    )
+    from telecom_pulse.pipeline import normalize_incidents
+
+    normalized = normalize_incidents(frame)
+    assert normalized["carrier"].tolist() == ["Claro", "Vivo", "TIM"]
 
 
 def test_resolved_incident_without_restore_is_rejected(tmp_path: Path) -> None:

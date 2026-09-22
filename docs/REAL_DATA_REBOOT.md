@@ -194,13 +194,12 @@ Fonte, período, atualização, serviço e metodologia.
 
 ## Gate atual
 
-**Sprint 0 / arquitetura: GREEN.**
+**Sprint R0 — homologação final: NO-GO por bloqueio externo único.**
 
-Pendências antes da implementação completa:
-- recurso exato de download SMP/SCM;
-- schema real das bases;
-- aliases reais de operadoras;
-- joins ANATEL ↔ IBGE;
-- período comum;
-- regra de agregação de índices não aditivos;
-- fallback SPA/deep link no Cloudflare.
+A arquitetura, o contrato territorial, a dimensão IBGE, a reconciliação de referência e os testes estão validados. O host oficial de CSV da ANATEL bloqueou o download automatizado neste ambiente, então não há bytes raw oficiais nem SHA-256 para cumprir o gate de ingestão reproduzível.
+
+Ver:
+- `docs/REAL_DATA_SPRINT_0_EVIDENCE.md`;
+- `docs/REAL_DATA_SPRINT_0_HOMOLOGATION.md`.
+
+O gate muda para GO somente após captura reproduzível de amostras raw SMP e SCM oficiais, inspeção de schema e reconciliação com a fonte primária.

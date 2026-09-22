@@ -23,6 +23,16 @@ REQUIRED_COLUMNS = {
 
 VALID_STATUS = {"open", "resolved"}
 
+CARRIER_ALIASES = {
+    "claro": "Claro",
+    "claro empresas": "Claro",
+    "vivo": "Vivo",
+    "telefonica": "Vivo",
+    "telefônica": "Vivo",
+    "tim": "TIM",
+    "tim brasil": "TIM",
+}
+
 
 def _clean_text(series: pd.Series) -> pd.Series:
     return series.astype("string").str.strip()
@@ -36,7 +46,10 @@ def normalize_incidents(frame: pd.DataFrame) -> pd.DataFrame:
         result[column] = _clean_text(result[column])
 
     result["status"] = _clean_text(result["status"]).str.lower()
-    result["carrier"] = result["carrier"].str.title()
+    normalized_carrier = result["carrier"].str.lower()
+    result["carrier"] = normalized_carrier.map(CARRIER_ALIASES).fillna(
+        result["carrier"].str.title()
+    )
     result["cause_category"] = (
         result["cause_category"].str.lower().str.replace(r"\s+", "_", regex=True)
     )

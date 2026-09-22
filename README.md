@@ -1,34 +1,60 @@
 # TelecomPulse Analytics
 
-TelecomPulse Analytics é um case de engenharia de dados + analytics + frontend para operações de telecom/NOC. O projeto transforma eventos sintéticos de indisponibilidade em métricas operacionais rastreáveis e em um dashboard web estático.
+**Brazilian Telecom Market & Quality Intelligence**
 
-> Status: **MVP técnico concluído. Publicação Cloudflare Workers em correção de configuração de build/assets.**
+TelecomPulse Analytics transforma dados públicos oficiais de telecomunicações em indicadores comparáveis de mercado, qualidade, experiência do consumidor e cobertura.
 
-## O que o MVP responde
+> **v2 — Real Data Reboot.** As Sprints 0–5 provaram arquitetura, governança, métricas, frontend e deploy com um dataset sintético. Essa fase passa a ser tratada como protótipo/ensaio. A partir da v2, o produto principal utiliza somente dados públicos rastreáveis a fontes oficiais.
 
-- disponibilidade por janela;
-- downtime bruto;
+## Perguntas que o produto pretende responder
+
+- quais são as maiores prestadoras por serviço e período;
+- como o market share evolui;
+- onde o mercado é mais concentrado;
+- como qualidade técnica varia por prestadora e geografia;
+- como reclamações se comportam por mil acessos;
+- como a qualidade percebida/satisfação se compara;
+- como cobertura e tecnologia evoluem;
+- onde mercado, qualidade e percepção divergem.
+
+## Fontes oficiais
+
+A fonte primária é a **Agência Nacional de Telecomunicações — Anatel**.
+
+Famílias de dados previstas:
+- acessos SMP — telefonia móvel;
+- acessos SCM — banda larga fixa;
+- RQUAL — IQS e indicadores técnicos;
+- Selos de Qualidade;
+- reclamações / Índice de Reclamações;
+- Pesquisa de Satisfação e Qualidade Percebida;
+- cobertura e tecnologia móvel;
+- relatórios trimestrais de competição.
+
+Consulte `docs/DATA_SOURCES.md` para proveniência e granularidade.
+
+## Regra de verdade
+
+Nenhum indicador será chamado de:
+- incidente;
+- downtime;
 - MTTR;
-- quantidade de incidentes;
-- recorrência;
-- concentração por operadora;
-- concentração por unidade/site;
-- causas de indisponibilidade;
-- evolução temporal;
-- detalhe operacional filtrável;
-- qualidade dos dados.
+- disponibilidade operacional;
 
-## Arquitetura
+a menos que exista fonte pública que realmente suporte essa semântica.
 
-`CSV sintético → Python/Pandas → validação/normalização → analytics → dashboard-v1.json/CSVs → React/TypeScript/Vite → build estático → Cloudflare Workers Static Assets`
+Os KPIs do protótipo sintético permanecem apenas como material histórico/teste e não representam desempenho real de prestadoras.
 
-O frontend não recalcula KPIs críticos. Cards, rankings e timeline consomem os agregados homologados produzidos pelo pipeline.
+## Arquitetura v2
+
+`Anatel/dados.gov.br → ingestão raw → staging imutável → normalização de prestadoras/serviços/geografia → marts analíticos → contrato JSON/CSV → React/TypeScript → Cloudflare Workers Static Assets`
 
 ## Stack
 
 ### Dados
 - Python 3.13
 - Pandas
+- requests
 - pytest
 - Ruff
 
@@ -36,91 +62,52 @@ O frontend não recalcula KPIs críticos. Cards, rankings e timeline consomem os
 - React 19
 - TypeScript
 - Vite
-- Vitest
-- Testing Library
-- jsdom
+- Vitest / Testing Library
 
-## Desenvolvimento local
+### Entrega
+- GitHub Actions
+- Cloudflare Workers + Static Assets
 
-### 1. Preparar Python
+## Fase atual
 
-```bash
-python -m venv .venv
-# Linux/macOS
-source .venv/bin/activate
-# Windows PowerShell
-# .venv\Scripts\Activate.ps1
+**Real Data Foundation**
 
-python -m pip install --upgrade pip
-pip install -e ".[dev]"
-ruff check src tests
-pytest -q
-```
+O objetivo imediato é:
+1. catalogar fontes oficiais;
+2. consolidar contratos;
+3. construir ingestão reproduzível;
+4. definir dimensão canônica de prestadoras;
+5. calcular Top N por serviço e período;
+6. validar market share e qualidade;
+7. só então reconstruir o dashboard público.
 
-### 2. Executar pipeline
+## Histórico sintético
 
-```bash
-python -m telecom_pulse.cli
-python -m telecom_pulse.presentation_cli
-```
+O protótipo anterior demonstrou:
+- pipeline;
+- validação;
+- métricas;
+- contrato frontend;
+- dashboard;
+- testes;
+- CI/CD;
+- publicação Cloudflare.
 
-### 3. Dashboard
-
-```bash
-cd web
-npm install
-npm test
-npm run audit:high
-npm run build
-npm run dev
-```
-
-`npm run dev` e `npm run build` geram automaticamente `web/public/data/dashboard-v1.json` antes de iniciar/buildar.
-
-## Contratos
-
-- `contracts/incident.schema.json`
-- `contracts/dashboard-v1.schema.json`
-
-Documentação:
-- `docs/METRICS.md`
-- `docs/FRONTEND_DATA_CONTRACT.md`
-- `docs/ARCHITECTURE.md`
+Ele não será apagado da história Git. A v2 assume explicitamente que essa etapa foi um ensaio técnico.
 
 ## Governança
 
-A ordem obrigatória de mudança é:
+Mudanças continuam seguindo:
 
-`Normas → Baseline → Validação → Evidências → Documentação → Implementação → Revalidação → Review`
+`Normas → Baseline → Fontes → Contratos → Validação → Evidências → Implementação → Revalidação → Review → Deploy autorizado`
 
 Leia:
 - `docs/GOVERNANCE.md`
+- `docs/PROJECT_CHARTER.md`
+- `docs/DATA_SOURCES.md`
+- `docs/ARCHITECTURE.md`
 - `docs/SPRINT_PLAN.md`
-- `docs/RISK_REGISTER.md`
-- `docs/BACKLOG.md`
-- evidências/gates de cada sprint.
 
-## Segurança e dados
+## Licença e atribuição de dados
 
-- dataset público sintético;
-- sem CNPJ, telefone, nome de contato ou identificadores operacionais reais;
-- sem secrets ou tokens no frontend;
-- `npm audit --audit-level=high` no CI;
-- deploy somente após autorização explícita.
-
-## Performance
-
-O CI da Sprint 4 limita o maior bundle JavaScript principal a **250 KiB não comprimido**. O contrato JSON permanece separado do bundle.
-
-## Estado das sprints
-
-- Sprint 0 — fundação: homologada e mergeada.
-- Sprint 1 — dados/qualidade: homologada e mergeada.
-- Sprint 2 — analytics/contratos: homologada e mergeada.
-- Sprint 3 — dashboard MVP: homologada e mergeada.
-- Sprint 4 — qualidade de produto/engenharia: homologada e mergeada.
-- Sprint 5 — release: publicação Cloudflare Workers em correção final; `wrangler.jsonc` versionado para `web/dist`.
-
-## Dados
-
-O dataset público de referência é sintético e existe apenas para tornar o case reproduzível e seguro.
+O projeto deve preservar a atribuição das fontes públicas. Dados da Anatel podem sofrer revisões posteriores pela própria Agência; por isso cada snapshot precisa registrar período, data de aquisição e origem.

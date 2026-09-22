@@ -255,7 +255,7 @@ function Dashboard({ data }: { data: DashboardContract }) {
           </p>
         </div>
         <div className="hero-meta" aria-label="Contexto do dataset">
-          <span className="dataset-badge">Dataset sintético</span>
+          <span className="dataset-badge">Dados sintéticos · operadoras reais</span>
           <dl>
             <div>
               <dt>Contrato</dt>
@@ -389,7 +389,7 @@ function Dashboard({ data }: { data: DashboardContract }) {
 
       <footer>
         <strong>TelecomPulse Analytics</strong>
-        <span>Dados sintéticos · métricas definidas em docs/METRICS.md</span>
+        <span>Incidentes e métricas sintéticos · nomes de operadoras reais usados apenas como dimensão demonstrativa</span>
       </footer>
     </main>
   )

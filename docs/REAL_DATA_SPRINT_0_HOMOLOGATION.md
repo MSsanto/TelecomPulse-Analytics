@@ -63,3 +63,53 @@ R0 becomes **GO** when all items below are recorded:
 - full validator suite green.
 
 No new product decision is required to close this gate.
+
+
+---
+
+## Re-homologation R0 — mitigation round
+
+### Result
+
+**NO-GO remains, now with internal mitigation fully GREEN.**
+
+After the first homologation, a governed raw-capture path was added:
+
+- `src/telecom_pulse/raw_capture.py`;
+- `scripts/capture_official_raw.py`;
+- `tests/test_raw_capture.py`;
+- `docs/RAW_CAPTURE_RUNBOOK.md`.
+
+The capture path:
+- accepts only HTTPS on the official ANATEL host;
+- rejects zero-byte responses;
+- detects and rejects the ANATEL WAF/block HTML page;
+- preserves raw bytes unchanged;
+- records exact source URL, UTC retrieval time, byte size, content type and SHA-256.
+
+### Validation
+
+GitHub Actions CI run **#185** completed successfully:
+
+- Python / Ruff: PASS;
+- pytest: PASS;
+- v1 pipeline regression: PASS;
+- web audit/tests/build/bundle budget: PASS;
+- Cloudflare build: PASS;
+- Wrangler deploy dry-run: PASS;
+- static smoke test: PASS.
+
+CI: https://github.com/MSsanto/TelecomPulse-Analytics/actions/runs/35799086000
+
+### External source check
+
+The official ANATEL open-data documentation continues to identify SMP/SCM datasets as monthly official access datasets, with CSV distribution and geographic consolidations. Current SCM CSV URLs indexed by search still return an ANATEL security/WAF block page from this execution environment.
+
+Therefore:
+
+- internal ingestion guardrail: **PASS**;
+- reproducible official raw capture in this environment: **FAIL / BLOCKED**;
+- Sprint R0: **NO-GO**;
+- Sprint R1 production ingestion: **NOT AUTHORIZED BY GOVERNANCE**.
+
+No merge and no deploy are authorized by this re-homologation.

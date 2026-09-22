@@ -2,7 +2,7 @@ REFERENCE_ROWS = [
     {
         "incident_id": "INC-0001",
         "site_id": "SITE-001",
-        "carrier": " carrier a ",
+        "carrier": " claro ",
         "opened_at": "2026-09-01T10:00:00Z",
         "restored_at": "2026-09-01T11:00:00Z",
         "status": "RESOLVED",
@@ -14,7 +14,7 @@ REFERENCE_ROWS = [
     {
         "incident_id": "INC-0002",
         "site_id": "SITE-002",
-        "carrier": "Carrier B",
+        "carrier": "Vivo",
         "opened_at": "2026-09-02T12:00:00Z",
         "restored_at": "2026-09-02T12:30:00Z",
         "status": "resolved",
@@ -26,7 +26,7 @@ REFERENCE_ROWS = [
     {
         "incident_id": "INC-0003",
         "site_id": "SITE-001",
-        "carrier": "Carrier A",
+        "carrier": "Claro",
         "opened_at": "2026-09-03T14:00:00Z",
         "restored_at": "2026-09-03T15:30:00Z",
         "status": "resolved",
@@ -38,7 +38,7 @@ REFERENCE_ROWS = [
     {
         "incident_id": "INC-0004",
         "site_id": "SITE-003",
-        "carrier": "Carrier C",
+        "carrier": "TIM",
         "opened_at": "2026-09-04T08:00:00Z",
         "restored_at": "",
         "status": "open",

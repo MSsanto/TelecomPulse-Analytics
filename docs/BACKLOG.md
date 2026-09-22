@@ -2,7 +2,7 @@
 
 ## P0 — Real Data Reboot
 
-**Status:** em execução na branch `feat/real-data-reboot-sprint0`.
+**Status:** Sprint R0 concluída até homologação final — **NO-GO externo (ANATEL raw download)**.
 
 ### Objetivo imediato
 Validar e ingerir a primeira amostra real ANATEL + IBGE antes de implementar o mapa.
@@ -12,15 +12,19 @@ Validar e ingerir a primeira amostra real ANATEL + IBGE antes de implementar o m
 - [x] catálogo inicial de fontes;
 - [x] contrato geográfico v2;
 - [x] epic Geographic Intelligence definido;
-- [ ] localizar recurso de download SMP;
-- [ ] localizar recurso de download SCM;
-- [ ] baixar amostra reproduzível;
-- [ ] registrar hash e metadados;
-- [ ] mapear aliases de operadoras;
-- [ ] validar chaves ANATEL ↔ IBGE;
-- [ ] provar SP → Sudeste → Brasil;
-- [ ] congelar contratos de apresentação v2;
-- [ ] validar estratégia SPA/deep-link antes do router.
+- [x] validar família oficial de dados SMP/SCM e documentação de CSV;
+- [x] validar códigos e hierarquia territorial IBGE;
+- [x] implementar dimensão geográfica canônica;
+- [x] provar SP + MG + RJ + ES → Sudeste em snapshot de validação;
+- [x] endurecer contrato geográfico v2;
+- [x] registrar evidências e homologação final;
+- [ ] **BLOQUEANTE R0:** baixar amostra raw oficial SMP de forma reproduzível;
+- [ ] **BLOQUEANTE R0:** baixar amostra raw oficial SCM de forma reproduzível;
+- [ ] registrar SHA-256 e schema real dos dois arquivos;
+- [ ] mapear aliases reais de operadoras diretamente no raw;
+- [ ] executar reconciliação territorial com fonte primária;
+- [ ] congelar contratos analíticos/apresentação v2 na Sprint R2/R3;
+- [ ] validar estratégia SPA/deep-link antes do router na Sprint R4.
 
 ### Regra
 Nenhum dashboard real será implementado antes do gate de dados da Sprint R0.

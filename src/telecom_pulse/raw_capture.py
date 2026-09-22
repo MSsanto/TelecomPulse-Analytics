@@ -42,7 +42,6 @@ def _looks_like_block_page(payload: bytes, content_type: str | None) -> bool:
         b"por quest",
         b"opera",
         b"bloquead",
-        b"código de bloqueio",
         b"codigo de bloqueio",
     )
     return html and any(marker in prefix for marker in markers)

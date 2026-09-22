@@ -609,3 +609,48 @@ footer strong {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
 }
+
+
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.source-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.source-card {
+  display: grid;
+  gap: 8px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  background: #0b1620;
+}
+
+.source-card > span:not(.section-kicker) {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.source-card a {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.methodology-list {
+  margin: 24px 0 0;
+  padding-left: 20px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .market-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+}

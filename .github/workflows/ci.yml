@@ -22,9 +22,11 @@ jobs:
       - run: pytest -q
       - name: Build official public dashboard contract
         run: python -m telecom_pulse.public_cli
-      - run: test -f data/presentation/dashboard-v2.json
-      - run: grep -q '"data_mode": "official_public"' data/presentation/dashboard-v2.json
-      - run: grep -q '"contract_version": "2.0"' data/presentation/dashboard-v2.json
+      - name: Validate v2 contract identity
+        run: |
+          test -f data/presentation/dashboard-v2.json
+          grep -q '"data_mode": "official_public"' data/presentation/dashboard-v2.json
+          grep -q '"contract_version": "2.0"' data/presentation/dashboard-v2.json
       - name: Reject synthetic NOC metrics from v2 contract
         run: |
           ! grep -q '"incident_count"' data/presentation/dashboard-v2.json

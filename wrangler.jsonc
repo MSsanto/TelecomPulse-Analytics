@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developers.cloudflare.com/workers/wrangler/config-schema.json",
+  "name": "telecompulse-analytics",
+  "compatibility_date": "2026-09-22",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "./web/dist"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://telecompulse.local/contracts/dashboard-v2.schema.json",
+  "title": "TelecomPulse Dashboard Contract v2",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "data_mode",
+    "authority",
+    "market",
+    "satisfaction",
+    "sources",
+    "methodology_notes"
+  ],
+  "properties": {
+    "contract_version": {"const": "2.0"},
+    "data_mode": {"const": "official_public"},
+    "authority": {"type": "string"},
+    "market": {
+      "type": "object",
+      "required": ["SMP", "SCM"],
+      "properties": {
+        "SMP": {"type": "object"},
+        "SCM": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "satisfaction": {
+      "type": "object",
+      "required": ["year", "rows"],
+      "properties": {
+        "year": {"type": "integer"},
+        "rows": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "sources": {"type": "array", "items": {"type": "object"}},
+    "methodology_notes": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

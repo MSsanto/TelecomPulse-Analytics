@@ -54,3 +54,23 @@ jobs:
           echo "Largest JS bundle: ${size} bytes"
           test -n "$size"
           test "$size" -le 256000
+
+  cloudflare-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: bash scripts/build-cloudflare.sh
+      - name: Local static smoke test
+        run: |
+          python -m http.server 4173 --directory web/dist >/tmp/telecompulse-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill $server_pid' EXIT
+          sleep 1
+          curl --fail --silent --show-error http://127.0.0.1:4173/ | grep -q "TelecomPulse Analytics"
+          curl --fail --silent --show-error http://127.0.0.1:4173/data/dashboard-v1.json | grep -q '"contract_version": "1.0"'

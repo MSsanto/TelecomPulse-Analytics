@@ -104,6 +104,8 @@ O repositório público deve usar uma destas opções:
 
 **Padrão do MVP: dataset sintético e reproduzível.**
 
+Os nomes de operadoras podem usar marcas reais de mercado como dimensão demonstrativa. Isso não transforma os eventos em dados reais: incidentes, sites, horários, causas, downtime, disponibilidade e demais métricas permanecem sintéticos e não devem ser interpretados como desempenho real de qualquer operadora.
+
 ## 8. Restrições
 
 - não versionar secrets;

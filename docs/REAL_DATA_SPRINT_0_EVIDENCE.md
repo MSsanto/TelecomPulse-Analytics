@@ -124,7 +124,18 @@ Tests cover:
 - rejection of incomplete regional coverage;
 - rejection of cross-region state contamination.
 
-The repository CI installs the development dependencies and executes `ruff check src tests` and the full pytest suite. CI result is recorded separately in the final homologation gate.
+GitHub Actions CI run **#172** for PR #10 completed successfully on commit `c3782afdb5527b3bf7aa8d3537def93526164151`.
+
+Validated in CI:
+- `ruff check src tests`: PASS;
+- full `pytest -q`: PASS;
+- legacy v1 pipeline/presentation generation: PASS;
+- frontend npm audit high/critical gate: PASS;
+- frontend tests/build/bundle budget: PASS;
+- Cloudflare production deploy dry-run: PASS;
+- local static smoke test: PASS.
+
+CI URL: https://github.com/MSsanto/TelecomPulse-Analytics/actions/runs/35798324643
 
 ## Regression scope
 

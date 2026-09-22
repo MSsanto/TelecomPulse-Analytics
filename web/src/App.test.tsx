@@ -26,7 +26,7 @@ describe('TelecomPulse dashboard', () => {
 
     expect(screen.getByText(/Carregando dados operacionais/i)).toBeInTheDocument()
     expect(await screen.findByRole('heading', { name: /TelecomPulse/i })).toBeInTheDocument()
-    expect(screen.getByText('Dataset sintético')).toBeInTheDocument()
+    expect(screen.getByText('Dados sintéticos · operadoras reais')).toBeInTheDocument()
     expect(screen.getByText('99,5%')).toBeInTheDocument()
     expect(screen.getByText('INC-0001')).toBeInTheDocument()
   })
@@ -37,7 +37,7 @@ describe('TelecomPulse dashboard', () => {
     render(<App />)
 
     await screen.findByText('INC-0001')
-    await user.selectOptions(screen.getByLabelText('Operadora'), 'Carrier B')
+    await user.selectOptions(screen.getByLabelText('Operadora'), 'Vivo')
 
     expect(screen.queryByText('INC-0001')).not.toBeInTheDocument()
     expect(screen.getByText('INC-0002')).toBeInTheDocument()

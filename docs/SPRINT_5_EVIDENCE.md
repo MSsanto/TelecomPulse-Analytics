@@ -32,4 +32,12 @@ Este ambiente não possui conector Cloudflare. Após o merge na `main`:
 
 ## Estado
 
-**AGUARDANDO CI DA SPRINT 5.**
+**PREPARAÇÃO DE RELEASE CONCLUÍDA NO GITHUB.**
+
+O CI da `main` foi validado com sucesso após o merge do commit de release `0fdbdcc0769e5748aa2476363ee31950fe2f6020`, incluindo:
+- Python: PASS;
+- web: PASS;
+- `cloudflare-build`: PASS;
+- smoke test local: PASS.
+
+A publicação externa no Cloudflare foi deliberadamente adiada pelo proprietário e está registrada em `docs/BACKLOG.md`.

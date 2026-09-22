@@ -167,8 +167,11 @@ function IncidentTable({
           <span>Altere ou limpe os filtros para recuperar registros.</span>
         </div>
       ) : (
-        <div className="table-wrap">
+        <div className="table-wrap" tabIndex={0} aria-label="Tabela de incidentes com rolagem horizontal">
           <table>
+            <caption className="sr-only">
+              Incidentes filtrados com unidade, operadora, status, causa, datas e downtime.
+            </caption>
             <thead>
               <tr>
                 <th>Incidente</th>
@@ -241,7 +244,8 @@ function Dashboard({ data }: { data: DashboardContract }) {
   const summary = data.summary
 
   return (
-    <main className="app-shell">
+    <main className="app-shell" id="dashboard-main">
+      <a className="skip-link" href="#executive-summary">Pular para indicadores</a>
       <header className="hero">
         <div>
           <p className="eyebrow">TELECOM OPERATIONS INTELLIGENCE</p>
@@ -269,7 +273,12 @@ function Dashboard({ data }: { data: DashboardContract }) {
         </div>
       </header>
 
-      <section className="kpi-grid" aria-label="Indicadores executivos">
+      <section
+        className="kpi-grid"
+        id="executive-summary"
+        aria-label="Indicadores executivos"
+        tabIndex={-1}
+      >
         <KpiCard
           label="Disponibilidade"
           value={`${formatNumber(summary.availability_pct, 2)}%`}
@@ -340,7 +349,7 @@ function Dashboard({ data }: { data: DashboardContract }) {
             Limpar filtros
           </button>
         </div>
-        <div className="filters-grid">
+        <div className="filters-grid" aria-describedby="filter-behavior-note">
           <label>
             <span>Operadora</span>
             <select value={filters.carrier} onChange={(event) => updateFilter('carrier', event.target.value)}>
@@ -371,7 +380,7 @@ function Dashboard({ data }: { data: DashboardContract }) {
             </select>
           </label>
         </div>
-        <p className="filter-note">
+        <p className="filter-note" id="filter-behavior-note">
           Os filtros alteram apenas a tabela. KPIs e rankings permanecem nos agregados homologados do contrato v1.
         </p>
       </section>
@@ -420,6 +429,9 @@ export default function App() {
         <h1>Não foi possível carregar o contrato analítico.</h1>
         <p>{error}</p>
         <p>Confirme a geração de <code>web/public/data/dashboard-v1.json</code>.</p>
+        <button className="retry-button" type="button" onClick={() => window.location.reload()}>
+          Tentar novamente
+        </button>
       </main>
     )
   }

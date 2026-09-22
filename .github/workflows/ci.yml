@@ -44,5 +44,13 @@ jobs:
         with:
           node-version: '22'
       - run: npm install
+      - run: npm run audit:high
+      - run: npm test
       - run: npm run build
       - run: test -f dist/data/dashboard-v1.json
+      - name: Enforce JavaScript bundle budget
+        run: |
+          size=$(find dist/assets -name 'index-*.js' -printf '%s\n' | sort -nr | head -1)
+          echo "Largest JS bundle: ${size} bytes"
+          test -n "$size"
+          test "$size" -le 256000

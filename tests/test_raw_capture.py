@@ -3,25 +3,20 @@ import json
 
 import pytest
 
-from telecom_pulse.raw_capture import (
-    RawCaptureError,
-    _looks_like_block_page,
-    _validate_source_url,
-    register_official_raw,
-)
+import telecom_pulse.raw_capture as raw_capture
 
 
 OFFICIAL_URL = "https://www.anatel.gov.br/dadosabertos/example.csv"
 
 
 def test_official_source_requires_anatel_https():
-    _validate_source_url(OFFICIAL_URL)
+    raw_capture._validate_source_url(OFFICIAL_URL)
 
-    with pytest.raises(RawCaptureError, match="HTTPS"):
-        _validate_source_url("http://www.anatel.gov.br/example.csv")
+    with pytest.raises(raw_capture.RawCaptureError, match="HTTPS"):
+        raw_capture._validate_source_url("http://www.anatel.gov.br/example.csv")
 
-    with pytest.raises(RawCaptureError, match="unexpected source host"):
-        _validate_source_url("https://example.com/example.csv")
+    with pytest.raises(raw_capture.RawCaptureError, match="unexpected source host"):
+        raw_capture._validate_source_url("https://example.com/example.csv")
 
 
 def test_waf_block_page_is_detected():
@@ -29,19 +24,19 @@ def test_waf_block_page_is_detected():
         "Por questões de segurança, esta operação no sistema foi bloqueada. "
         "Código de bloqueio: 123"
     ).encode()
-    assert _looks_like_block_page(payload, "text/html; charset=utf-8")
-    assert _looks_like_block_page(payload, None)
+    assert raw_capture._looks_like_block_page(payload, "text/html; charset=utf-8")
+    assert raw_capture._looks_like_block_page(payload, None)
 
 
 def test_csv_like_payload_is_not_a_block_page():
     payload = b"UF;Grupo;Acessos\nSP;EXEMPLO;10\n"
-    assert not _looks_like_block_page(payload, "text/csv")
-    assert not _looks_like_block_page(payload, None)
+    assert not raw_capture._looks_like_block_page(payload, "text/csv")
+    assert not raw_capture._looks_like_block_page(payload, None)
 
 
 def test_html_without_block_marker_is_not_misclassified():
     payload = b"<html><body>dataset catalog</body></html>"
-    assert not _looks_like_block_page(payload, "text/html")
+    assert not raw_capture._looks_like_block_page(payload, "text/html")
 
 
 def test_manual_registration_is_byte_exact_and_generates_manifest(tmp_path):
@@ -50,7 +45,7 @@ def test_manual_registration_is_byte_exact_and_generates_manifest(tmp_path):
     source.write_bytes(payload)
     output = tmp_path / "raw" / "smp.csv"
 
-    metadata = register_official_raw(
+    metadata = raw_capture.register_official_raw(
         service="SMP",
         source_url=OFFICIAL_URL,
         source_file=source,
@@ -77,8 +72,8 @@ def test_manual_registration_refuses_overwrite(tmp_path):
     output = tmp_path / "raw.csv"
     output.write_bytes(b"existing")
 
-    with pytest.raises(RawCaptureError, match="already exists"):
-        register_official_raw(
+    with pytest.raises(raw_capture.RawCaptureError, match="already exists"):
+        raw_capture.register_official_raw(
             service="SMP",
             source_url=OFFICIAL_URL,
             source_file=source,
@@ -94,8 +89,8 @@ def test_manual_registration_rejects_waf_html(tmp_path):
         encoding="utf-8",
     )
 
-    with pytest.raises(RawCaptureError, match="block page"):
-        register_official_raw(
+    with pytest.raises(raw_capture.RawCaptureError, match="block page"):
+        raw_capture.register_official_raw(
             service="SCM",
             source_url=OFFICIAL_URL,
             source_file=source,

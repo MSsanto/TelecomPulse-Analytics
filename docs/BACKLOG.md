@@ -2,7 +2,7 @@
 
 ## P0 — Real Data Reboot
 
-**Status:** Sprint R0 concluída até homologação final — **NO-GO externo (ANATEL raw download)**.
+**Status:** Sprint R0 pronta para fechamento por aquisição manual governada ou automática — **NO-GO enquanto os raws oficiais SMP/SCM não estiverem registrados**.
 
 ### Objetivo imediato
 Validar e ingerir a primeira amostra real ANATEL + IBGE antes de implementar o mapa.
@@ -18,9 +18,11 @@ Validar e ingerir a primeira amostra real ANATEL + IBGE antes de implementar o m
 - [x] provar SP + MG + RJ + ES → Sudeste em snapshot de validação;
 - [x] endurecer contrato geográfico v2;
 - [x] registrar evidências e homologação final;
-- [ ] **BLOQUEANTE R0:** baixar amostra raw oficial SMP de forma reproduzível;
-- [ ] **BLOQUEANTE R0:** baixar amostra raw oficial SCM de forma reproduzível;
-- [ ] registrar SHA-256 e schema real dos dois arquivos;
+- [x] implementar captura HTTPS governada com detecção de WAF;
+- [x] implementar registro manual governado de arquivo baixado da URL oficial;
+- [ ] **BLOQUEANTE R0:** registrar raw oficial SMP por caminho automático ou manual governado;
+- [ ] **BLOQUEANTE R0:** registrar raw oficial SCM por caminho automático ou manual governado;
+- [ ] registrar/validar SHA-256 e schema real dos dois arquivos;
 - [ ] mapear aliases reais de operadoras diretamente no raw;
 - [ ] executar reconciliação territorial com fonte primária;
 - [ ] congelar contratos analíticos/apresentação v2 na Sprint R2/R3;

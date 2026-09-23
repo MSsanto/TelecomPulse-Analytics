@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import shutil
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -22,6 +23,8 @@ class RawCaptureMetadata:
     sha256: str
     content_type: str | None
     output_path: str
+    acquisition_method: str
+    original_filename: str
 
 
 _ALLOWED_HOSTS = {"www.anatel.gov.br", "anatel.gov.br"}
@@ -37,14 +40,28 @@ def _validate_source_url(source_url: str) -> None:
 
 def _looks_like_block_page(payload: bytes, content_type: str | None) -> bool:
     prefix = payload[:8192].lower()
-    html = content_type is not None and "text/html" in content_type.lower()
+    html_signature = b"<html" in prefix or b"<!doctype html" in prefix
+    html_content_type = content_type is not None and "text/html" in content_type.lower()
     markers = (
         b"por quest",
         b"opera",
         b"bloquead",
         b"codigo de bloqueio",
     )
-    return html and any(marker in prefix for marker in markers)
+    return (html_signature or html_content_type) and any(marker in prefix for marker in markers)
+
+
+def _write_metadata(output_path: Path, metadata: RawCaptureMetadata) -> None:
+    metadata_path = output_path.with_suffix(output_path.suffix + ".metadata.json")
+    metadata_path.write_text(
+        json.dumps(asdict(metadata), ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _validate_destination(output_path: Path) -> None:
+    if output_path.exists():
+        raise RawCaptureError(f"raw destination already exists: {output_path}")
 
 
 def capture_official_raw(
@@ -55,6 +72,7 @@ def capture_official_raw(
     timeout_seconds: int = 60,
 ) -> RawCaptureMetadata:
     _validate_source_url(source_url)
+    _validate_destination(output_path)
 
     request = Request(
         source_url,
@@ -88,11 +106,52 @@ def capture_official_raw(
         sha256=hashlib.sha256(payload).hexdigest(),
         content_type=content_type,
         output_path=str(output_path),
+        acquisition_method="automatic_https",
+        original_filename=output_path.name,
     )
+    _write_metadata(output_path, metadata)
+    return metadata
 
-    metadata_path = output_path.with_suffix(output_path.suffix + ".metadata.json")
-    metadata_path.write_text(
-        json.dumps(asdict(metadata), ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
+
+def register_official_raw(
+    *,
+    service: str,
+    source_url: str,
+    source_file: Path,
+    output_path: Path,
+    retrieved_at: str | None = None,
+) -> RawCaptureMetadata:
+    _validate_source_url(source_url)
+    _validate_destination(output_path)
+
+    if not source_file.is_file():
+        raise RawCaptureError(f"source file does not exist: {source_file}")
+
+    payload = source_file.read_bytes()
+    if not payload:
+        raise RawCaptureError("source file contains zero bytes")
+
+    if _looks_like_block_page(payload, None):
+        raise RawCaptureError("source file is an ANATEL security/WAF block page, not raw data")
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source_file, output_path)
+
+    copied_payload = output_path.read_bytes()
+    if copied_payload != payload:
+        output_path.unlink(missing_ok=True)
+        raise RawCaptureError("byte-for-byte verification failed after raw registration")
+
+    metadata = RawCaptureMetadata(
+        service=service.upper(),
+        source_url=source_url,
+        retrieved_at=retrieved_at or datetime.now(UTC).isoformat(),
+        byte_size=len(payload),
+        sha256=hashlib.sha256(payload).hexdigest(),
+        content_type=None,
+        output_path=str(output_path),
+        acquisition_method="manual_governed",
+        original_filename=source_file.name,
     )
+    _write_metadata(output_path, metadata)
     return metadata

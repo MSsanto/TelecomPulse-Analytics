@@ -15,3 +15,8 @@ data/processed/
 data/presentation/
 
 web/public/data/
+
+# TelecomPulse v2 official raw bytes: keep local/immutable, version metadata only
+data/raw/v2/anatel/**/*.csv
+data/raw/v2/anatel/**/*.xlsx
+data/raw/v2/anatel/**/*.ods

@@ -1,5 +1,39 @@
 # TelecomPulse Analytics — Backlog
 
+## P0 — Real Data Reboot
+
+**Status:** aquisição manual/automática homologada em CI — **NO-GO somente até registrar os raws oficiais SMP e SCM e validar o schema primário**.
+
+### Objetivo imediato
+Validar e ingerir a primeira amostra real ANATEL + IBGE antes de implementar o mapa.
+
+### Itens
+- [x] arquitetura do reboot;
+- [x] catálogo inicial de fontes;
+- [x] contrato geográfico v2;
+- [x] epic Geographic Intelligence definido;
+- [x] validar família oficial de dados SMP/SCM e documentação de CSV;
+- [x] validar códigos e hierarquia territorial IBGE;
+- [x] implementar dimensão geográfica canônica;
+- [x] provar SP + MG + RJ + ES → Sudeste em snapshot de validação;
+- [x] endurecer contrato geográfico v2;
+- [x] registrar evidências e homologação final;
+- [x] adotar Ruflo como camada de orquestração governada;
+- [x] implementar captura HTTPS governada com detecção de WAF;
+- [x] implementar registro manual governado de arquivo baixado da URL oficial;
+- [ ] **BLOQUEANTE R0:** registrar raw oficial SMP por caminho automático ou manual governado;
+- [ ] **BLOQUEANTE R0:** registrar raw oficial SCM por caminho automático ou manual governado;
+- [ ] registrar/validar SHA-256 e schema real dos dois arquivos;
+- [ ] mapear aliases reais de operadoras diretamente no raw;
+- [ ] executar reconciliação territorial com fonte primária;
+- [ ] congelar contratos analíticos/apresentação v2 na Sprint R2/R3;
+- [ ] validar estratégia SPA/deep-link antes do router na Sprint R4.
+
+### Regra
+Nenhum dashboard real será implementado antes do gate de dados da Sprint R0.
+
+---
+
 ## P0 — Publicação Cloudflare
 
 **Status:** em correção / publicação iniciada  

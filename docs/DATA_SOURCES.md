@@ -1,0 +1,141 @@
+# TelecomPulse v2 — Data Sources
+
+## Status
+
+Sprint R0 / Real Data Reboot — final gate executed. See `docs/REAL_DATA_SPRINT_0_HOMOLOGATION.md`.
+
+Nenhum dataset entra na camada analítica sem:
+- proprietário/fonte identificada;
+- URL oficial;
+- período de referência;
+- data de coleta;
+- formato conhecido;
+- granularidade documentada;
+- chave de junção conhecida;
+- regra de transformação;
+- classificação CORE / AUXILIARY / VALIDATION.
+
+## Fontes aprovadas
+
+### DS-001 — ANATEL — Acessos de telecomunicações
+
+**Classe:** CORE  
+**Serviços alvo:** SMP e SCM  
+**Uso:** acessos, market share, crescimento, distribuição territorial, séries históricas.  
+**Origem institucional:** Agência Nacional de Telecomunicações — Dados Abertos.  
+**URL institucional:** https://www.gov.br/anatel/pt-br/dados/dados-abertos
+
+A Anatel mantém bases abertas de quantitativo de acessos de SMP e SCM e declara os dados abertos como estruturados, processáveis por máquina e reutilizáveis.
+
+**Campos mínimos esperados para homologação:** período, serviço, prestadora/grupo, UF e quantidade de acessos.  
+**Chaves candidatas:** período + serviço + operadora normalizada + UF.  
+**Gate:** validar o recurso de download efetivamente consumido pelo pipeline antes da implementação.
+
+### DS-002 — ANATEL — RQUAL / IQS / Selos de Qualidade
+
+**Classe:** CORE  
+**Uso:** qualidade técnica e comparação por serviço, operadora e território.  
+**URL institucional:** https://www.gov.br/anatel/pt-br/dados/qualidade/qualidade-dos-servicos/resultados  
+**Referência metodológica:** https://www.gov.br/anatel/pt-br/dados/qualidade/qualidade-dos-servicos/regulamento
+
+O MOP vigente em 2026 define métodos de coleta, cálculo, consolidação e publicação. A base de Selos de Qualidade e IQS foi publicada em dados abertos em abril de 2026.
+
+**Regra:** índices não serão agregados por média simples sem método oficial compatível.
+
+### DS-003 — ANATEL — Reclamações / Índice de Reclamações
+
+**Classe:** CORE  
+**Uso:** experiência pós-consumo e comparação de reclamações normalizadas.  
+**Referência metodológica:** https://www.gov.br/anatel/pt-br/dados/qualidade/qualidade-dos-servicos/regulamento
+
+O IR é definido como razão entre reclamações registradas no Anatel Consumidor e acessos da operadora, em grupos de mil acessos.
+
+**Regra:** armazenar numerador, denominador e índice sempre que a fonte permitir.
+
+### DS-004 — ANATEL — Pesquisa de Satisfação e Qualidade Percebida
+
+**Classe:** CORE  
+**Uso:** ISG/IQP e percepção do consumidor por serviço/prestadora.  
+**URL:** https://www.gov.br/anatel/pt-br/consumidor/pesquisa-de-satisfacao-e-qualidade
+
+A Pesquisa 2025 foi realizada entre julho de 2025 e fevereiro de 2026 e inclui resultados por serviço e prestadora.
+
+**Regra:** não comparar serviços diferentes como se fossem uma única métrica.
+
+### DS-005 — ANATEL — Cobertura móvel
+
+**Classe:** AUXILIARY  
+**Uso:** cobertura 4G/5G, cobertura territorial/populacional e expansão de rede.  
+**URL institucional:** https://www.gov.br/anatel/pt-br/dados/qualidade/qualidade-dos-servicos/mapa-cobertura
+
+**Entrada planejada:** após homologação do núcleo SMP/SCM.
+
+### DS-006 — IBGE — Estimativas populacionais 2026
+
+**Classe:** CORE-AUXILIARY  
+**Uso:** população por UF/município, densidade e indicadores por 100 habitantes.  
+**URL:** https://www.ibge.gov.br/estatisticas/sociais/populacao/9103-estimativas-de-population.html  
+**Referência:** 1º de julho de 2026.  
+**Formatos declarados:** XLSX, ODS e PDF.
+
+**Chave preferencial:** código IBGE.  
+**Regra:** população deve ser associada ao período de referência correto e nunca tratada como mensal.
+
+## Fontes complementares
+
+### RI das operadoras
+
+**Classe:** AUXILIARY  
+**Uso futuro:** receita, EBITDA, CAPEX, ARPU e indicadores corporativos.
+
+Não usar no núcleo v2 até existir uma matriz de comparabilidade contábil entre operadoras.
+
+### Fontes secundárias de mercado
+
+**Classe:** VALIDATION  
+Ex.: portais setoriais e consolidações de mercado.
+
+Podem ser usadas para conferência, nunca como fonte primária quando existir dado oficial equivalente.
+
+## Hierarquia de confiança
+
+1. ANATEL / IBGE — fonte primária.
+2. Relações com investidores / documentos corporativos oficiais — complementar.
+3. Fontes setoriais secundárias — validação.
+4. Conteúdo editorial/social — fora do pipeline analítico.
+
+## Sprint R0 — gate de fontes
+
+- [x] confirmar catálogo oficial ANATEL para acessos SMP/SCM;
+- [x] confirmar CSV e granularidades geográficas documentadas;
+- [x] validar códigos territoriais oficiais do IBGE;
+- [x] implementar dimensão Brasil → Região → UF;
+- [x] executar prova aritmética SP + MG + RJ + ES → Sudeste em snapshot de validação;
+- [ ] baixar bytes brutos oficiais SMP de forma reproduzível;
+- [ ] baixar bytes brutos oficiais SCM de forma reproduzível;
+- [ ] registrar SHA-256, data de coleta e schema real dos arquivos oficiais;
+- [ ] validar aliases reais de operadoras no arquivo bruto;
+- [ ] executar reconciliação territorial usando diretamente a fonte primária.
+
+### Limitação observada
+
+O host de arquivos CSV da ANATEL bloqueou a recuperação automatizada neste ambiente por mecanismo de segurança/WAF. A existência, o formato e as granularidades da fonte foram validados pela documentação oficial, mas a Sprint R0 não declara ingestão raw concluída sem os bytes oficiais.
+
+Detalhes: `docs/REAL_DATA_SPRINT_0_EVIDENCE.md`.
+
+
+## Canonical raw access URLs validated from ANATEL Painéis
+
+Validated from the official `informacoes.anatel.gov.br/paineis` catalog on 2026-09-22:
+
+### SMP — Telefonia Móvel
+- Catalog: `https://informacoes.anatel.gov.br/paineis/`
+- Official raw ZIP: `https://www.anatel.gov.br/dadosabertos/paineis_de_dados/acessos/acessos_telefonia_movel.zip`
+- Portal Brasileiro de Dados Abertos dataset: `https://dados.gov.br/dados/conjuntos-dados/acessos-autorizadas-smp`
+
+### SCM — Banda Larga Fixa
+- Catalog: `https://informacoes.anatel.gov.br/paineis/`
+- Official raw ZIP: `https://www.anatel.gov.br/dadosabertos/paineis_de_dados/acessos/acessos_banda_larga_fixa.zip`
+- Portal Brasileiro de Dados Abertos dataset: `https://dados.gov.br/dados/conjuntos-dados/acessos---banda-larga-fixa`
+
+The official Painéis catalog labels both ZIPs as **Dados Brutos**. These consolidated ZIP URLs supersede guessing monthly filenames for the R0 canonical acquisition path.

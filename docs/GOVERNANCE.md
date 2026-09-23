@@ -46,3 +46,36 @@ Uma mudança só está pronta quando:
 - nenhuma regressão conhecida foi introduzida;
 - documentação necessária foi atualizada;
 - nenhuma ação de deploy/publicação ocorreu sem autorização.
+
+
+## Camada de orquestração
+
+Para tarefas complexas, o projeto usa o modelo de coordenação inspirado no Ruflo como camada acima do roteamento de skills.
+
+Ordem:
+
+`Ruflo-style Coordinator → SKILLS_ORCHESTRATOR → Implementador governado → Validadores → Gate`
+
+O orquestrador pode decompor, paralelizar e coordenar trabalho, mas não pode:
+- reduzir critérios de aceite;
+- ignorar falhas críticas;
+- substituir evidência por consenso entre agentes;
+- autorizar deploy/publicação;
+- promover dado não validado para produção.
+
+Leia: `docs/RUFLO_ORCHESTRATION.md`.
+
+
+## Memória de projeto
+
+O projeto usa o padrão arquitetural do `ai-memory` para memória durável e handoff entre sessões/agentes.
+
+Hierarquia de autoridade:
+
+`Fonte/Evidência atual → Golden Rule/Gate → Memória canônica → Memória episódica`
+
+Memória nunca substitui validação atual e não pode promover suposição ou resultado não homologado para fato canônico.
+
+Leia:
+- `docs/AI_MEMORY.md`
+- `docs/memory/index.md`

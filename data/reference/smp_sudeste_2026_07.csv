@@ -1,0 +1,7 @@
+period,service,geography_type,geography_code,accesses,evidence_tier,source_note
+2026-07,SMP,state,SP,86765457,VALIDATION_SECONDARY,"Radar da Telecom; declares Anatel source"
+2026-07,SMP,state,MG,27665157,VALIDATION_SECONDARY,"Radar da Telecom; declares Anatel source"
+2026-07,SMP,state,RJ,22093588,VALIDATION_SECONDARY,"Radar da Telecom; declares Anatel source"
+2026-07,SMP,state,ES,5014235,VALIDATION_SECONDARY,"Radar da Telecom; declares Anatel source"
+2026-07,SMP,region,SE,141538437,DERIVED_VALIDATION,"sum of SP+MG+RJ+ES"
+2026-07,SMP,country,BR,279184156,PRIMARY_OFFICIAL,"Anatel July 2026 national total"

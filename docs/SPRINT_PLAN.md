@@ -284,14 +284,14 @@ Fechar as fontes oficiais, identidade de operadoras, dimensão territorial e reg
 - primeira reconciliação SP → Sudeste → Brasil.
 
 ### Gate
-**GO:** fontes primárias acessíveis, joins demonstrados e reconciliação das métricas aditivas.  
-**NO-GO:** fonte sem download reproduzível, operadora não normalizável ou divergência territorial sem diagnóstico.
+**GO:** fontes primárias capturadas com proveniência verificável, raw imutável, hash, schema inspecionado, joins demonstrados e reconciliação das métricas aditivas. A captura pode ser automática ou manual governada a partir da URL oficial.  
+**NO-GO:** raw oficial sem proveniência/hash, operadora não normalizável ou divergência territorial sem diagnóstico.
 
 ### Homologação final R0 — 2026-09-22
 
-**NO-GO por bloqueio externo único:** a documentação e o catálogo oficiais da ANATEL foram validados, porém o host de CSV bloqueou o download automatizado neste ambiente. O projeto não reduz o critério de aceite retroativamente.
+**NO-GO por ausência dos arquivos raw oficiais:** a documentação e o catálogo oficiais da ANATEL foram validados e o projeto agora aceita dois caminhos equivalentes de aquisição: captura HTTPS automática ou registro manual governado de download feito diretamente da URL oficial.
 
-A dimensão territorial, contrato, reconciliação de referência e testes estão concluídos. O único gate bloqueante é capturar bytes raw oficiais SMP/SCM, seus hashes e schema real.
+A dimensão territorial, contrato, reconciliação de referência, capturadores e testes estão concluídos. O gate restante é registrar os bytes raw oficiais SMP/SCM, seus hashes, schema real e executar a reconciliação primária.
 
 ## Sprint R1 — Ingestão real
 

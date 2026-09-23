@@ -113,3 +113,38 @@ Therefore:
 - Sprint R1 production ingestion: **NOT AUTHORIZED BY GOVERNANCE**.
 
 No merge and no deploy are authorized by this re-homologation.
+
+
+---
+
+## Gate policy correction — provenance over transport
+
+Approved implementation change:
+
+The R0 integrity requirement is now defined as **official provenance + immutable raw bytes + SHA-256 + schema inspection + primary-source reconciliation**.
+
+Accepted acquisition mechanisms:
+1. automatic HTTPS capture from the official ANATEL host;
+2. governed manual registration of a browser-downloaded file from the exact official ANATEL URL.
+
+This is not a relaxation of source quality. It removes an unnecessary dependency on the ANATEL WAF allowing machine HTTP access.
+
+Implemented controls:
+- official-host URL allowlist;
+- HTTPS requirement;
+- zero-byte rejection;
+- saved WAF/block-page rejection;
+- destination overwrite refusal;
+- byte-for-byte verification after copy;
+- SHA-256 generation;
+- provenance metadata;
+- acquisition-method metadata;
+- raw-file Git exclusion.
+
+### Current verdict after policy correction
+
+**NO-GO — data artifact missing, not architecture blocked.**
+
+The WAF is no longer a governance blocker because manual governed acquisition is allowed. The remaining mandatory evidence is the actual registration of one official SMP raw and one official SCM raw, followed by schema inspection and primary-source reconciliation.
+
+R1 production ingestion still does not start before those artifacts exist.

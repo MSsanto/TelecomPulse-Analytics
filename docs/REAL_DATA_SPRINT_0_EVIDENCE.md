@@ -215,3 +215,26 @@ The test suite now contains **28 passing tests** at the raw-registration validat
 - rejection of a saved ANATEL block page.
 
 The existing v1 pipeline also remained green.
+
+
+## Canonical consolidated ANATEL raw ZIPs
+
+The official ANATEL Painéis catalog exposes the following raw ZIP resources:
+
+- SMP: `https://www.anatel.gov.br/dadosabertos/paineis_de_dados/acessos/acessos_telefonia_movel.zip`
+- SCM: `https://www.anatel.gov.br/dadosabertos/paineis_de_dados/acessos/acessos_banda_larga_fixa.zip`
+
+The catalog labels them as **Dados Brutos** and also links the corresponding datasets in dados.gov.br.
+
+A runtime download attempt still failed against the ANATEL host, so no claim of byte capture is made.
+
+A ZIP inspector was added to profile:
+- archive members;
+- CSV members;
+- byte size;
+- encoding;
+- delimiter;
+- actual headers.
+
+GitHub Actions CI **#226** completed successfully after this addition:
+https://github.com/MSsanto/TelecomPulse-Analytics/actions/runs/35801461625

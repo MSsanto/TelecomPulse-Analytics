@@ -48,7 +48,10 @@ def _looks_like_block_page(payload: bytes, content_type: str | None) -> bool:
         b"bloquead",
         b"codigo de bloqueio",
     )
-    return (html_signature or html_content_type) and any(marker in prefix for marker in markers)
+    has_block_marker = any(marker in prefix for marker in markers)
+    if content_type is None:
+        return has_block_marker
+    return (html_signature or html_content_type) and has_block_marker
 
 
 def _write_metadata(output_path: Path, metadata: RawCaptureMetadata) -> None:

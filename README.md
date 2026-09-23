@@ -95,6 +95,7 @@ A ordem obrigatória de mudança é:
 
 Leia:
 - `docs/GOVERNANCE.md`
+- `docs/RUFLO_ORCHESTRATION.md`
 - `docs/SPRINT_PLAN.md`
 - `docs/RISK_REGISTER.md`
 - `docs/BACKLOG.md`

@@ -18,6 +18,7 @@ Validar e ingerir a primeira amostra real ANATEL + IBGE antes de implementar o m
 - [x] provar SP + MG + RJ + ES → Sudeste em snapshot de validação;
 - [x] endurecer contrato geográfico v2;
 - [x] registrar evidências e homologação final;
+- [x] adotar Ruflo como camada de orquestração governada;
 - [x] implementar captura HTTPS governada com detecção de WAF;
 - [x] implementar registro manual governado de arquivo baixado da URL oficial;
 - [ ] **BLOQUEANTE R0:** registrar raw oficial SMP por caminho automático ou manual governado;

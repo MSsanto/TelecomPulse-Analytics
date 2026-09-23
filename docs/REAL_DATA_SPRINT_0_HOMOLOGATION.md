@@ -148,3 +148,43 @@ Implemented controls:
 The WAF is no longer a governance blocker because manual governed acquisition is allowed. The remaining mandatory evidence is the actual registration of one official SMP raw and one official SCM raw, followed by schema inspection and primary-source reconciliation.
 
 R1 production ingestion still does not start before those artifacts exist.
+
+
+---
+
+## Re-homologation — governed manual acquisition implementation
+
+### Implementation verdict
+
+**GREEN.**
+
+GitHub Actions CI run **#215** completed successfully for commit `250172ca782f2e73adccfbdcc0f288eadd93b506` and subsequent PR merge ref.
+
+Validated:
+- Ruff: PASS;
+- pytest: PASS;
+- manual registration byte-preservation tests: PASS;
+- WAF saved-file rejection: PASS;
+- overwrite protection: PASS;
+- metadata/SHA-256 generation: PASS;
+- v1 regression: PASS;
+- frontend audit/tests/build/bundle budget: PASS;
+- Cloudflare build + Wrangler dry-run + smoke test: PASS.
+
+CI: https://github.com/MSsanto/TelecomPulse-Analytics/actions/runs/35800991819
+
+### Overall Sprint R0 verdict
+
+**NO-GO — awaiting external data artifacts only.**
+
+The acquisition design is no longer blocked by the ANATEL WAF. R0 can close as GO through either automatic capture or governed manual registration.
+
+Missing mandatory evidence:
+- one official SMP raw file;
+- one official SCM raw file;
+- manifests/hashes from those exact files;
+- real schema inspection;
+- operator alias mapping from raw values;
+- primary-source territorial reconciliation.
+
+No further code change is required to solve the transport/WAF issue.

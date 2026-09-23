@@ -2,7 +2,7 @@
 
 ## P0 — Real Data Reboot
 
-**Status:** Sprint R0 pronta para fechamento por aquisição manual governada ou automática — **NO-GO enquanto os raws oficiais SMP/SCM não estiverem registrados**.
+**Status:** aquisição manual/automática homologada em CI — **NO-GO somente até registrar os raws oficiais SMP e SCM e validar o schema primário**.
 
 ### Objetivo imediato
 Validar e ingerir a primeira amostra real ANATEL + IBGE antes de implementar o mapa.

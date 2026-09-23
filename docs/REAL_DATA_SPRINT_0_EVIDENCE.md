@@ -178,3 +178,24 @@ Added a governed raw capture utility after the initial gate.
 The first CI attempt exposed a non-ASCII bytes literal in WAF detection; this was corrected before re-homologation. Final CI run #185 is fully green.
 
 The utility is deliberately not wired into normal CI network calls because the external ANATEL host is not a deterministic test dependency. Network-free unit tests validate URL allowlisting and WAF-page classification.
+
+
+## Governed manual acquisition implementation
+
+The project now supports a second accepted official-data acquisition path through `scripts/register_official_raw.py`.
+
+This path exists specifically for cases where the official ANATEL URL is available in a browser but automated retrieval is blocked.
+
+Controls are implemented and covered by unit tests:
+- exact official URL required;
+- HTTPS required;
+- ANATEL host allowlisted;
+- empty files rejected;
+- saved WAF HTML rejected;
+- raw destination cannot be overwritten;
+- byte-for-byte copy verification;
+- SHA-256 and byte size recorded;
+- original filename preserved in metadata;
+- acquisition method recorded as `manual_governed`.
+
+Raw files under `data/raw/v2/anatel/` are excluded from Git; metadata remains suitable for versioned evidence.

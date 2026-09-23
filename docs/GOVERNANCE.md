@@ -64,3 +64,18 @@ O orquestrador pode decompor, paralelizar e coordenar trabalho, mas não pode:
 - promover dado não validado para produção.
 
 Leia: `docs/RUFLO_ORCHESTRATION.md`.
+
+
+## Memória de projeto
+
+O projeto usa o padrão arquitetural do `ai-memory` para memória durável e handoff entre sessões/agentes.
+
+Hierarquia de autoridade:
+
+`Fonte/Evidência atual → Golden Rule/Gate → Memória canônica → Memória episódica`
+
+Memória nunca substitui validação atual e não pode promover suposição ou resultado não homologado para fato canônico.
+
+Leia:
+- `docs/AI_MEMORY.md`
+- `docs/memory/index.md`

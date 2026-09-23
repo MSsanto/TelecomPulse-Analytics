@@ -199,3 +199,19 @@ Controls are implemented and covered by unit tests:
 - acquisition method recorded as `manual_governed`.
 
 Raw files under `data/raw/v2/anatel/` are excluded from Git; metadata remains suitable for versioned evidence.
+
+
+## CI evidence — governed manual registration
+
+Final implementation validation: GitHub Actions **#215 — SUCCESS**.
+
+The test suite now contains **28 passing tests** at the raw-registration validation point, including:
+- accepted official URL handling;
+- rejection of insecure/non-ANATEL provenance URLs;
+- WAF-page detection with and without HTTP content type;
+- byte-exact manual registration;
+- SHA-256/manifest generation;
+- overwrite refusal;
+- rejection of a saved ANATEL block page.
+
+The existing v1 pipeline also remained green.

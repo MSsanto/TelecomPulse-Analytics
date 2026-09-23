@@ -122,3 +122,20 @@ Podem ser usadas para conferência, nunca como fonte primária quando existir da
 O host de arquivos CSV da ANATEL bloqueou a recuperação automatizada neste ambiente por mecanismo de segurança/WAF. A existência, o formato e as granularidades da fonte foram validados pela documentação oficial, mas a Sprint R0 não declara ingestão raw concluída sem os bytes oficiais.
 
 Detalhes: `docs/REAL_DATA_SPRINT_0_EVIDENCE.md`.
+
+
+## Canonical raw access URLs validated from ANATEL Painéis
+
+Validated from the official `informacoes.anatel.gov.br/paineis` catalog on 2026-09-22:
+
+### SMP — Telefonia Móvel
+- Catalog: `https://informacoes.anatel.gov.br/paineis/`
+- Official raw ZIP: `https://www.anatel.gov.br/dadosabertos/paineis_de_dados/acessos/acessos_telefonia_movel.zip`
+- Portal Brasileiro de Dados Abertos dataset: `https://dados.gov.br/dados/conjuntos-dados/acessos-autorizadas-smp`
+
+### SCM — Banda Larga Fixa
+- Catalog: `https://informacoes.anatel.gov.br/paineis/`
+- Official raw ZIP: `https://www.anatel.gov.br/dadosabertos/paineis_de_dados/acessos/acessos_banda_larga_fixa.zip`
+- Portal Brasileiro de Dados Abertos dataset: `https://dados.gov.br/dados/conjuntos-dados/acessos---banda-larga-fixa`
+
+The official Painéis catalog labels both ZIPs as **Dados Brutos**. These consolidated ZIP URLs supersede guessing monthly filenames for the R0 canonical acquisition path.

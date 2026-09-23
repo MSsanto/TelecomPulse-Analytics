@@ -2,7 +2,6 @@ import hashlib
 import json
 
 import pytest
-
 import telecom_pulse.raw_capture as raw_capture
 
 

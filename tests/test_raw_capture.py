@@ -4,9 +4,9 @@ import json
 import pytest
 
 from telecom_pulse.raw_capture import (
-    RawCaptureError,
     _looks_like_block_page,
     _validate_source_url,
+    RawCaptureError,
     register_official_raw,
 )
 
